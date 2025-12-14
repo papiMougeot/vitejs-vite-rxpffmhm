@@ -7,7 +7,7 @@ import { LE_CODEX } from './boulotron-data';
 // =============================================================================
 const INFOS = {
   titre_entete: 'Dernier tirage €Millions enregistré :',
-  numero_et_date: 'N° 1902 – vendredi 12/12/2025',
+  numero_et_date: 'N° 1902 – Dimanche 14/12/2025',
   boules: ['07', '25', '30', '37', '41'],
   etoiles: ['05', '11'],
   rang: 'Rang : 75 390 788',
