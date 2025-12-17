@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-// IMPORT DE LA BIBLIOTHÈQUE
+// IMPORT DE LA BIBLIOTHÈQUE DE DONNÉES
 import { LE_CODEX } from './boulotron-data';
+// IMPORT DE L'EXPERT LUNAIRE (Le Cerveau)
+import { obtenirPhaseLunaire, PhaseLune } from './lune';
 
 // =============================================================================
 // 1. LES DONNÉES (INTEGRÉES)
@@ -102,36 +104,6 @@ function BanIcon({ size = 16, className = '' }: any) {
   );
 }
 
-function StarIcon({
-  size = 24,
-  color = 'currentColor',
-  className = '',
-  style = {},
-}: any) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke={color}
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      style={{
-        ...style,
-        width: size,
-        height: size,
-        minWidth: size,
-        minHeight: size,
-      }}
-    >
-      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-    </svg>
-  );
-}
 function VolumeIcon({
   size = 24,
   color = 'currentColor',
@@ -285,26 +257,6 @@ function SphereIcon({ size = 32, className = '' }: any) {
       <circle cx="12" cy="12" r="10" />
       <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
       <path d="M2 12h20" />
-    </svg>
-  );
-}
-function QuestionMarkIcon({ size = 40, className = '' }: any) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="3"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <circle cx="12" cy="12" r="10" fill="#FFF" stroke="none" opacity="0.8" />
-      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" stroke="#000" />
-      <line x1="12" y1="17" x2="12.01" y2="17" stroke="#000" />
     </svg>
   );
 }
@@ -706,7 +658,6 @@ function TapisVolant({
       }
     }
     onValidate(finalBalls, finalStars);
-    // ICI : ON NE FERME PLUS LA MODALE NOUS-MÊME, C'EST LE PARENT (APP) QUI S'EN CHARGE VIA LE CALLBACK
   };
 
   const getButtonLabel = () => {
@@ -1358,6 +1309,15 @@ export default function App() {
   // STATE MODALE CODEX
   const [showCodex, setShowCodex] = useState(false);
 
+  // STATE LUNAIRE (LE CERVEAU)
+  const [lune, setLune] = useState<PhaseLune | null>(null);
+
+  // EFFECT LUNAIRE (CALCUL AU DÉMARRAGE)
+  useEffect(() => {
+    const phaseActuelle = obtenirPhaseLunaire();
+    setLune(phaseActuelle);
+  }, []);
+
   const { initAudio, playTick, playStop, playBug, playWin, muted, setMuted } =
     useAudio();
   const rightInterval = useRef<any>(null);
@@ -1735,6 +1695,14 @@ export default function App() {
         return '';
     }
   };
+
+  // NOUVEAU: Date du jour pour la météo
+  const todayStr = new Date().toLocaleDateString('fr-FR', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  });
 
   return (
     <div className="app-wrapper">
@@ -2196,6 +2164,54 @@ export default function App() {
         </div>
 
         <div className="flex flex-col gap-4">
+          {/* --- NOUVEAU MODULE MÉTÉO LUNAIRE --- */}
+          {lune && (
+            <div
+              onClick={handleOpenCodex}
+              className={`relative overflow-hidden p-3 rounded border-l-4 shadow-sm transition-all duration-500 cursor-pointer group ${
+                lune.favorable
+                  ? 'bg-green-900/30 border-green-500 shadow-[0_0_15px_rgba(34,197,94,0.2)] hover:bg-green-900/50'
+                  : 'bg-slate-800/80 border-slate-600 hover:bg-slate-700/80'
+              }`}
+              title="Ouvrir le Codex Lunaire"
+            >
+              <div className="flex justify-between items-baseline mb-2 border-b border-white/10 pb-1">
+                <span className="text-[10px] text-white uppercase tracking-widest font-bold">
+                  Météo Astrale
+                </span>
+                <span className="text-[10px] text-white font-mono capitalize">
+                  {todayStr}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-3 relative z-10">
+                <div className="text-4xl filter drop-shadow-md animate-pulse">
+                  {lune.icone}
+                </div>
+                <div className="flex flex-col text-left">
+                  <span
+                    className={`font-bold uppercase text-sm ${
+                      lune.favorable ? 'text-green-400' : 'text-slate-200'
+                    }`}
+                  >
+                    {lune.nom}
+                  </span>
+                  <span
+                    className={`text-xs italic mt-1 ${
+                      lune.favorable ? 'text-green-200' : 'text-slate-500'
+                    }`}
+                  >
+                    {lune.conseil}
+                  </span>
+                </div>
+              </div>
+              <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+              {lune.favorable && (
+                <div className="absolute -bottom-4 -right-4 w-16 h-16 bg-green-500/20 blur-xl rounded-full pointer-events-none"></div>
+              )}
+            </div>
+          )}
+
           <div
             onClick={handleSiphonOfficial}
             className="bg-slate-800/80 p-3 rounded border border-slate-600 shadow-sm cursor-pointer hover:bg-slate-700/50 hover:border-cyan-500 transition-all group relative overflow-hidden"
