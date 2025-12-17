@@ -7,16 +7,16 @@ import { LE_CODEX } from './boulotron-data';
 // =============================================================================
 const INFOS = {
   titre_entete: 'Dernier tirage €Millions enregistré :',
-  numero_et_date: 'N° 1902 – vendredi 12/12/2025',
-  boules: ['07', '25', '30', '37', '41'],
-  etoiles: ['05', '11'],
-  rang: 'Rang : 75 390 788',
-  gagnants: '1 gagnant à 5+2',
-  gain_montant: 'Gain de 17 000 000 €',
-  gain_lieu: 'remporté en IRLANDE',
-  my_million: 'My Million N° 125 788',
-  prochain_date: 'Prochain Tirage : Mardi 16/12/2025',
-  prochain_jackpot: 'Jackpot de 17 000 000 €',
+  numero_et_date: 'N° 1903 – mardi 16/12/2025',
+  boules: ['14', '16', '40', '41', '44'],
+  etoiles: ['02', '10'],
+  rang: 'Rang : 111 885 133',
+  gagnants: '1 gagnant à 5+1',
+  gain_montant: 'Gain de 488 880,90 €',
+  gain_lieu: 'remporté en FRANCE',
+  my_million: 'My Million N° 1 207 415',
+  prochain_date: 'Prochain Tirage : vendredi 19/12/2025',
+  prochain_jackpot: 'Jackpot de 29 000 000 €',
 };
 
 // =============================================================================
