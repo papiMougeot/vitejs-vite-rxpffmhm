@@ -591,13 +591,21 @@ function TapisVolant({
     setErrorMsg(null);
   };
 
+  // ------------------------------------------------------------------------------------------
+  // LE CŒUR DU SÉLECTRON - LOGIQUE DE VALIDATION & REMPLISSAGE
+  // ------------------------------------------------------------------------------------------
   const handleValidate = () => {
     let finalBalls = [...selectedNums];
     let finalStars = [...selectedStars];
+
+    // 1. D'ABORD, ON RESPECTE LES QUOTAS (Les chiffres jaunes)
+    // Et on assure le "au moins 1" pour les Verts
     for (let d = 0; d < 5; d++) {
       const min = d * 10 + 1;
       const max = d * 10 + 10;
       let decadePool = [];
+
+      // On prépare le sac de la dizaine pour les quotas
       if (decadeStatus[d] !== 'forbidden') {
         for (let i = min; i <= max; i++) {
           if (!finalBalls.includes(i) && !forbiddenNums.includes(i)) {
@@ -605,11 +613,14 @@ function TapisVolant({
           }
         }
       }
+
+      // A. On comble les quotas (ex: l'utilisateur a demandé "2" numéros ici via les boutons +)
       const targetCount = decadeConstraints[d];
       const currentCount = finalBalls.filter(
         (n) => Math.ceil(n / 10) - 1 === d
       ).length;
       let needed = targetCount - currentCount;
+
       if (needed > 0) {
         for (let k = 0; k < needed; k++) {
           if (decadePool.length === 0) break;
@@ -618,6 +629,8 @@ function TapisVolant({
           decadePool.splice(randIndex, 1);
         }
       }
+
+      // B. On assure la présence minimale si VERT (au moins 1)
       if (decadeStatus[d] === 'required') {
         const hasNum = finalBalls.some((n) => Math.ceil(n / 10) - 1 === d);
         if (!hasNum && decadePool.length > 0) {
@@ -627,24 +640,48 @@ function TapisVolant({
         }
       }
     }
+
+    // 2. LE REMPLISSAGE FINAL (Logique Exclusive)
     if (finalBalls.length < 5) {
       let pool = [];
+      
+      // QUESTION CRUCIALE : Y a-t-il des dizaines vertes activées ?
+      const hasGreenDecades = decadeStatus.includes('required');
+
       for (let i = 1; i <= 50; i++) {
         const dIndex = Math.ceil(i / 10) - 1;
-        if (
+        
+        // Est-ce que ce numéro est disponible ? (Pas déjà pris, pas interdit, pas dans dizaine rouge)
+        const isAvailable = 
           !finalBalls.includes(i) &&
           !forbiddenNums.includes(i) &&
-          decadeStatus[dIndex] !== 'forbidden'
-        ) {
-          pool.push(i);
+          decadeStatus[dIndex] !== 'forbidden';
+
+        if (isAvailable) {
+          // LOGIQUE EXCLUSIVE :
+          // Si on a des dizaines Vertes (hasGreenDecades est vrai), 
+          // on n'ajoute au sac QUE les numéros dont la dizaine est Verte ('required').
+          // Les dizaines "Neutres" sont ignorées dans ce cas.
+          if (hasGreenDecades) {
+            if (decadeStatus[dIndex] === 'required') {
+              pool.push(i);
+            }
+          } else {
+            // Sinon (si tout est gris/neutre), on ajoute tout ce qui est dispo.
+            pool.push(i);
+          }
         }
       }
+
+      // On tire au hasard dans ce sac filtré jusqu'à avoir 5 boules
       while (finalBalls.length < 5 && pool.length > 0) {
         const randIndex = Math.floor(Math.random() * pool.length);
         finalBalls.push(pool[randIndex]);
         pool.splice(randIndex, 1);
       }
     }
+
+    // 3. REMPLISSAGE DES ÉTOILES (inchangé)
     if (finalStars.length < 2) {
       let pool = [];
       for (let i = 1; i <= 12; i++) {
@@ -657,6 +694,7 @@ function TapisVolant({
         pool.splice(randIndex, 1);
       }
     }
+
     onValidate(finalBalls, finalStars);
   };
 
