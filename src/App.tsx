@@ -580,6 +580,9 @@ function TapisVolant({
   // ------------------------------------------------------------------------------------------
   // LE CŒUR DU SÉLECTRON - LOGIQUE DE VALIDATION & REMPLISSAGE
   // ------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
+  // LE CŒUR DU SÉLECTRON - LOGIQUE DE VALIDATION & REMPLISSAGE (VERSION PAPI MOUGEOT FINAL)
+  // ------------------------------------------------------------------------------------------
   const handleValidate = () => {
     let finalBalls = [...selectedNums];
     let finalStars = [...selectedStars];
@@ -617,7 +620,9 @@ function TapisVolant({
       }
 
       // B. On assure la présence minimale si VERT (au moins 1)
-      if (decadeStatus[d] === 'required') {
+      // ATTENTION : On ne le fait que si le compteur est à 0. 
+      // Si le compteur est > 0, le quota ci-dessus a déjà fait le job.
+      if (decadeStatus[d] === 'required' && decadeConstraints[d] === 0) {
         const hasNum = finalBalls.some((n) => Math.ceil(n / 10) - 1 === d);
         if (!hasNum && decadePool.length > 0) {
           const randIndex = Math.floor(Math.random() * decadePool.length);
@@ -627,7 +632,7 @@ function TapisVolant({
       }
     }
 
-    // 2. LE REMPLISSAGE FINAL (Logique Exclusive)
+    // 2. LE REMPLISSAGE FINAL (Logique Exclusive & Quota Strict)
     if (finalBalls.length < 5) {
       let pool = [];
       
@@ -636,24 +641,28 @@ function TapisVolant({
 
       for (let i = 1; i <= 50; i++) {
         const dIndex = Math.ceil(i / 10) - 1;
+        const constraintVal = decadeConstraints[dIndex];
+
+        // RÈGLE D'OR PAPI MOUGEOT :
+        // Si l'utilisateur a mis un compteur (1, 2...), cette dizaine est FERMÉE pour le remplissage.
+        // On ne comble les trous que dans les dizaines où le compteur est à 0.
+        const isDecadeLockedByQuota = constraintVal > 0;
         
-        // Est-ce que ce numéro est disponible ? (Pas déjà pris, pas interdit, pas dans dizaine rouge)
         const isAvailable = 
           !finalBalls.includes(i) &&
           !forbiddenNums.includes(i) &&
-          decadeStatus[dIndex] !== 'forbidden';
+          decadeStatus[dIndex] !== 'forbidden' &&
+          !isDecadeLockedByQuota; // <--- C'est ici que ça se joue !
 
         if (isAvailable) {
           // LOGIQUE EXCLUSIVE :
-          // Si on a des dizaines Vertes (hasGreenDecades est vrai), 
-          // on n'ajoute au sac QUE les numéros dont la dizaine est Verte ('required').
-          // Les dizaines "Neutres" sont ignorées dans ce cas.
           if (hasGreenDecades) {
+            // Si mode Vert activé, on ne prend que dans les Verts (qui n'ont pas de quota fixe)
             if (decadeStatus[dIndex] === 'required') {
               pool.push(i);
             }
           } else {
-            // Sinon (si tout est gris/neutre), on ajoute tout ce qui est dispo.
+            // Sinon (tout gris), on prend partout (sauf là où y'a des quotas fixes)
             pool.push(i);
           }
         }
@@ -2302,3 +2311,4 @@ export default function App() {
     </div>
   );
 }
+
