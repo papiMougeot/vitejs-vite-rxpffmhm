@@ -285,33 +285,36 @@ function DecadeBouloscope({ balls }: { balls: number[] }) {
     const dIndex = Math.ceil(n / 10) - 1;
     if (dIndex >= 0 && dIndex < 5) dist[dIndex]++;
   });
-  const codeDizaines = dist.join('');
+
+  // 1. On identifie les dizaines qui contiennent au moins une boule
+  const indicesSortis = dist
+    .map((count, i) => (count > 0 ? i + 1 : null))
+    .filter((v) => v !== null);
+
+  // 2. On vérifie si une dizaine a fait le "Grand Chelem" (les 5 boules)
+  const grandChelemIndex = dist.findIndex((count) => count === 5);
+
+  // 3. Préparation du libellé visuel
+  let libelle = "";
+  if (grandChelemIndex !== -1) {
+    libelle = `Tous les numéros sont sortis dizaine : ${grandChelemIndex + 1}`;
+  } else {
+    libelle = `Dizaines sorties : ${indicesSortis.join("")}`;
+  }
+
   return (
     <div className="w-full mt-2 bg-slate-900/50 rounded p-2 border border-slate-700/50">
-      <div className="flex justify-between items-end gap-1 h-16 px-2 mb-2">
+      {/* Les barres de progression visuelles */}
+      <div className="flex justify-between items-end gap-1 h-12 px-2 mb-2">
         {dist.map((count, i) => (
-          <div
-            key={i}
-            className="flex flex-col items-center justify-end h-full w-1/5"
-          >
-            <div
-              className={`mb-1 text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center ${
-                count > 0
-                  ? 'bg-cyan-600 text-white'
-                  : 'bg-slate-700 text-slate-500'
-              }`}
-            >
-              {count}
+          <div key={i} className="flex flex-col items-center justify-end h-full w-1/5">
+            <div className={`mb-1 text-[9px] font-bold ${count > 0 ? 'text-cyan-400' : 'text-slate-600'}`}>
+              {count > 0 ? `${count}b` : ""}
             </div>
-            <div
-              className="w-full bg-slate-800 rounded-t-sm relative overflow-hidden"
-              style={{ height: '100%' }}
-            >
+            <div className="w-full bg-slate-800 rounded-t-sm relative overflow-hidden" style={{ height: '60%' }}>
               <div
-                className={`absolute bottom-0 left-0 w-full ${
-                  count > 0
-                    ? 'bg-gradient-to-t from-cyan-600 to-cyan-400'
-                    : 'bg-transparent'
+                className={`absolute bottom-0 left-0 w-full transition-all duration-500 ${
+                  count === 5 ? 'bg-yellow-400 shadow-[0_0_10px_gold]' : 'bg-cyan-600'
                 }`}
                 style={{ height: `${count * 20}%` }}
               ></div>
@@ -319,12 +322,15 @@ function DecadeBouloscope({ balls }: { balls: number[] }) {
           </div>
         ))}
       </div>
-      <div className="flex justify-between items-center pt-1 border-t border-slate-700/50">
-        <span className="text-[10px] text-slate-500 font-mono uppercase">
-          Répartition
-        </span>
-        <div className="text-xs font-bold font-mono text-cyan-400 tracking-widest bg-slate-950 px-2 rounded border border-cyan-900/50">
-          {codeDizaines}
+      
+      {/* Le nouveau libellé dynamique */}
+      <div className="flex justify-center items-center pt-2 border-t border-slate-700/50">
+        <div className={`text-[10px] font-bold font-mono tracking-wider px-2 py-1 rounded border ${
+          grandChelemIndex !== -1 
+            ? 'bg-yellow-900/30 border-yellow-500 text-yellow-400 animate-pulse' 
+            : 'bg-slate-950 border-cyan-900/50 text-cyan-400'
+        }`}>
+          {libelle}
         </div>
       </div>
     </div>
