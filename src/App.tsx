@@ -586,9 +586,6 @@ function TapisVolant({
   // ------------------------------------------------------------------------------------------
   // LE CŒUR DU SÉLECTRON - LOGIQUE DE VALIDATION & REMPLISSAGE
   // ------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------
-  // LE CŒUR DU SÉLECTRON - LOGIQUE DE VALIDATION & REMPLISSAGE (VERSION PAPI MOUGEOT FINAL)
-  // ------------------------------------------------------------------------------------------
   const handleValidate = () => {
     let finalBalls = [...selectedNums];
     let finalStars = [...selectedStars];
@@ -651,30 +648,25 @@ function TapisVolant({
 
         // RÈGLE D'OR PAPI MOUGEOT :
         // Si l'utilisateur a mis un compteur (1, 2...), cette dizaine est FERMÉE pour le remplissage.
-        // On ne comble les trous que dans les dizaines où le compteur est à 0.
         const isDecadeLockedByQuota = constraintVal > 0;
         
         const isAvailable = 
           !finalBalls.includes(i) &&
           !forbiddenNums.includes(i) &&
           decadeStatus[dIndex] !== 'forbidden' &&
-          !isDecadeLockedByQuota; // <--- C'est ici que ça se joue !
+          !isDecadeLockedByQuota; 
 
         if (isAvailable) {
-          // LOGIQUE EXCLUSIVE :
           if (hasGreenDecades) {
-            // Si mode Vert activé, on ne prend que dans les Verts (qui n'ont pas de quota fixe)
             if (decadeStatus[dIndex] === 'required') {
               pool.push(i);
             }
           } else {
-            // Sinon (tout gris), on prend partout (sauf là où y'a des quotas fixes)
             pool.push(i);
           }
         }
       }
 
-      // On tire au hasard dans ce sac filtré jusqu'à avoir 5 boules
       while (finalBalls.length < 5 && pool.length > 0) {
         const randIndex = Math.floor(Math.random() * pool.length);
         finalBalls.push(pool[randIndex]);
@@ -740,7 +732,6 @@ function TapisVolant({
                 ? 'text-green-400 text-shadow-glow'
                 : 'text-yellow-400'
             }`}
-            title="Clic 1: Répartition 1-1-1-1-1 / Clic 2: Présence Partout / Clic 3: Reset"
           >
             <h3 className="font-bold text-center text-xs uppercase flex items-center gap-2">
               DIZAINES{' '}
@@ -1636,6 +1627,54 @@ export default function App() {
     setShowTapis(false); // On ferme toujours le tapis par défaut
   };
 
+  // --- NOUVEAU MODULE DE TÉLÉCHARGEMENT EXPERT ---
+  const handleDownloadCSV = () => {
+    if (history.length === 0) return;
+    
+    // Entêtes pour fusion de données (1000+ lignes)
+    const headers = [
+      "Session_#", "Source", "Date", "Heure", "Phase_Lune", 
+      "Rang_Global", "B1", "B2", "B3", "B4", "B5", 
+      "E1", "E2", "Poids_Somme", "Signature_Dizaines"
+    ];
+
+    const rows = history.map((item, index) => {
+      // Calcul du poids (Somme des 5 boules)
+      const poids = item.data.balls.reduce((acc: number, curr: number) => acc + curr, 0);
+      
+      // Extraction de la signature (on utilise votre logique DecadeBouloscope)
+      const dist = [0, 0, 0, 0, 0];
+      item.data.balls.forEach((n) => {
+        const dIndex = Math.ceil(n / 10) - 1;
+        if (dIndex >= 0 && dIndex < 5) dist[dIndex]++;
+      });
+      const signature = dist.map((count, i) => (count > 0 ? i + 1 : '')).join('');
+
+      return [
+        history.length - index,
+        item.mode.toUpperCase(),
+        item.dateStr,
+        item.timeStr,
+        lune?.nom || "Non calculée",
+        item.rank.toString().replace(/\s/g, ''), // Rang pur pour Excel
+        ...[...item.data.balls].sort((a, b) => a - b),
+        ...[...item.data.stars].sort((a, b) => a - b),
+        poids,
+        signature
+      ].join(';');
+    });
+
+    const csvContent = '\uFEFF' + [headers.join(';'), ...rows].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `Boulotron_Expert_${new Date().toISOString().slice(0,10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   // SWITCH MODE (Utilise Reset Nettoyeur)
   const switchMode = (mode: GameMode) => {
     resetGame();
@@ -1652,41 +1691,7 @@ export default function App() {
   };
 
   const handlePrint = () => window.print();
-  const handleDownload = () => {
-    if (history.length === 0) return;
-    const headers = [
-      'Date',
-      'Heure',
-      'Mode',
-      'Rang',
-      'Boule 1',
-      'Boule 2',
-      'Boule 3',
-      'Boule 4',
-      'Boule 5',
-      'Etoile 1',
-      'Etoile 2',
-    ];
-    const rows = history.map((item) =>
-      [
-        item.dateStr,
-        item.timeStr,
-        item.mode,
-        item.rank,
-        ...item.data.balls,
-        ...item.data.stars,
-      ].join(';')
-    );
-    const csvContent = '\uFEFF' + [headers.join(';'), ...rows].join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.setAttribute('href', url);
-    link.setAttribute('download', 'boulotron_export.csv');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+
   useEffect(() => {
     clearInterval(rightInterval.current);
     clearInterval(midInterval.current);
@@ -1784,9 +1789,9 @@ export default function App() {
                 <PrinterIcon size={18} />
               </button>
               <button
-                onClick={handleDownload}
+                onClick={handleDownloadCSV}
                 className="flex items-center gap-1 text-green-600 hover:text-green-400 transition-colors text-xs font-bold bg-transparent"
-                title="Télécharger CSV"
+                title="Télécharger CSV Expert (Lune + Poids)"
               >
                 <DownloadIcon size={18} /> (.csv)
               </button>
