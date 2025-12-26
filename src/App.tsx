@@ -1875,28 +1875,26 @@ export default function App() {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-1 justify-center">
+                <div className="flex flex-wrap gap-1 justify-center py-1">
                   {item.data.balls.map((b) => (
                     <span
                       key={b}
-                      className="w-6 h-6 rounded-full bg-slate-200 text-slate-900 flex items-center justify-center text-xs font-bold border border-slate-400 print-black-text"
+                      className="w-6 h-6 rounded-full bg-slate-200 text-slate-900 flex items-center justify-center text-xs font-bold border border-slate-400 print-black-text shadow-sm"
                     >
                       {b}
                     </span>
                   ))}
-                  <div className="w-px bg-slate-600 mx-1"></div>
+                  <div className="w-px bg-slate-600 mx-1 h-4 self-center"></div>
                   {item.data.stars.map((s) => (
                     <span
                       key={s}
-                      className="w-6 h-6 rounded-full bg-yellow-400 text-yellow-900 flex items-center justify-center text-xs font-bold border border-yellow-600 print-black-text"
+                      className="w-6 h-6 rounded-full bg-yellow-400 text-yellow-900 flex items-center justify-center text-xs font-bold border border-yellow-600 print-black-text shadow-sm"
                     >
                       {s}
                     </span>
                   ))}
                 </div>
-                {phase === 'finished' && (
-                  <DecadeBouloscope balls={item.data.balls} />
-                )}
+               
               </div>
             ))}
           </div>
