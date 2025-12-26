@@ -1779,17 +1779,20 @@ export default function App() {
       >
         <div className="flex flex-col mb-4 border-b border-slate-600 pb-2">
           <div className="flex items-center justify-between w-full">
-            {/* 1. TITRE ET COMPTEUR DISSOCIÉS */}
+            {/* 1. TITRE ET COMPTEUR DYNAMIC */}
             <div className="flex items-center gap-2">
               <h2 className="text-lg font-bold text-yellow-400 print-black-text uppercase tracking-tighter">
                 Historique
               </h2>
-              <div className="flex items-center bg-slate-900/50 px-2 py-0.5 rounded border border-slate-700">
+              <div className="flex items-center bg-slate-900/50 px-2 py-0.5 rounded border border-slate-700 ml-1">
                 <span className="text-sm font-bold text-white font-mono">{history.length}</span>
-                <span className="text-xs text-slate-500 font-mono">/{historyLimit}</span>
+                <span className="text-sm font-bold text-white font-mono">/{historyLimit}</span>
               </div>
-              
-              {/* ROUE CRANTÉE DE RÉGLAGE */}
+            </div>
+
+            {/* 2. BLOC D'ACTIONS HARMONISÉ (ROUE + IMPRIMANTE + CSV) */}
+            <div className="flex items-center gap-4 no-print">
+              {/* LA ROUE CRANTÉE : Taille 18 + Couleur Slate-400 + Espace gap-4 */}
               <button 
                 onClick={() => {
                   const input = window.prompt("Capacité de l'historique (ex: 30, 50, 100) :", historyLimit.toString());
@@ -1800,17 +1803,16 @@ export default function App() {
                     }
                   }
                 }}
-                className="text-slate-500 hover:text-yellow-400 transition-all hover:rotate-90 no-print"
+                className="text-slate-400 hover:text-white transition-all hover:rotate-90 bg-transparent"
+                title="Régler la capacité"
               >
-                <SettingsIcon size={14} />
+                <SettingsIcon size={18} />
               </button>
-            </div>
 
-            {/* 2. BOUTONS ACTIONS ALIGNÉS SUR LA MÊME LIGNE */}
-            <div className="flex items-center gap-3 no-print">
               <button onClick={handlePrint} className="text-slate-400 hover:text-white transition-colors bg-transparent">
                 <PrinterIcon size={18} />
               </button>
+              
               <button onClick={handleDownloadCSV} className="flex items-center gap-1 text-green-600 hover:text-green-400 transition-colors text-[10px] font-bold bg-transparent">
                 <DownloadIcon size={18} /> (.csv)
               </button>
