@@ -1792,7 +1792,6 @@ export default function App() {
 
             {/* 2. BLOC D'ACTIONS HARMONISÉ (ROUE + IMPRIMANTE + CSV) */}
             <div className="flex items-center gap-4 no-print">
-              {/* LA ROUE CRANTÉE : Taille 18 + Couleur Slate-400 + Espace gap-4 */}
               <button 
                 onClick={() => {
                   const input = window.prompt("Capacité de l'historique (ex: 30, 50, 100) :", historyLimit.toString());
@@ -1839,23 +1838,43 @@ export default function App() {
                   padding: '0.5rem',
                 }}
               >
-                <div className="flex justify-between items-end text-xs font-mono border-b border-slate-700/50 pb-1 mb-1">
-                  <div className="flex items-center gap-2 text-cyan-400 print-black-text">
-                    <span className="uppercase font-bold">
-                      {item.mode === 'goulotron'
-                        ? '🎯 GOULOTRON'
-                        : item.mode === 'selectron'
-                        ? '🏗️ SÉLECTRON'
-                        : '# HASARD'}
-                    </span>
-                    <span className="text-slate-500">|</span>
-                    <span className="text-slate-300">{item.dateStr}</span>
+                {/* LIGNE 1 : CHRONO, RANG ET SIGNATURE DIZAINES (VERSION EXPERT) */}
+                <div className="flex justify-between items-center text-[11px] font-mono border-b border-slate-700/50 pb-1 mb-1">
+                  {/* GAUCHE : Chrono + Rang */}
+                  <div className="flex items-center gap-2">
+                    <span className="text-white font-bold">#{history.length - idx}</span>
+                    <div className="text-yellow-500 font-bold">
+                      <span className="text-white font-normal text-[10px]">Rang : </span>
+                      {item.rank.toLocaleString()}
+                    </div>
                   </div>
-                  <div className="text-yellow-500 font-bold print-black-text text-right">
-                    <span className="text-slate-500 font-normal mr-1">Rg:</span>
-                    {item.rank.toLocaleString()}
+
+                  {/* DROITE : Signature Dizaines dynamique */}
+                  <div className="flex items-center">
+                    {(() => {
+                      const dist = [0, 0, 0, 0, 0];
+                      item.data.balls.forEach((n) => {
+                        const dIndex = Math.ceil(n / 10) - 1;
+                        if (dIndex >= 0 && dIndex < 5) dist[dIndex]++;
+                      });
+                      const indicesSortis = dist.map((count, i) => (count > 0 ? i + 1 : null)).filter((v) => v !== null);
+                      const grandChelem = dist.findIndex((count) => count === 5);
+                      
+                      // LOGIQUE COULEUR : Rouge (Chelem), Orange (<3 ou 5 dizaines), Vert (3 ou 4)
+                      const isOrange = indicesSortis.length < 3 || indicesSortis.length === 5;
+                      const colorClass = grandChelem !== -1 ? 'text-red-500 animate-pulse' : isOrange ? 'text-orange-400' : 'text-green-400';
+                      const label = grandChelem !== -1 ? `CHELEM ${grandChelem + 1}` : indicesSortis.join('');
+
+                      return (
+                        <div className={`font-bold ${colorClass}`}>
+                          <span className="text-white font-normal text-[10px]">Dizaines : </span>
+                          {label}
+                        </div>
+                      );
+                    })()}
                   </div>
                 </div>
+
                 <div className="flex flex-wrap gap-1 justify-center">
                   {item.data.balls.map((b) => (
                     <span
