@@ -10,7 +10,13 @@ import { INFOS_TIRAGE as INFOS } from './dernierTirage';
 // =============================================================================
 // 2. OUTILS & ICONES
 // =============================================================================
-
+function SettingsIcon({ size = 18, className = '' }: any) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>
+    </svg>
+  );
+}
 function BookIcon({ size = 24, className = '' }: any) {
   return (
     <svg
@@ -1316,6 +1322,7 @@ export default function App() {
   const [finalRank, setFinalRank] = useState<number | null>(null);
   const [resultData, setResultData] = useState<ResultData | null>(null);
   const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [historyLimit, setHistoryLimit] = useState<number>(20);
   // NOUVEAU: Message du panneau central (Information)
   const [infoMessage, setInfoMessage] = useState<string>(
     "La Caisse à Outils de l'€Millions"
@@ -1601,7 +1608,7 @@ export default function App() {
         mode: gameMode,
         data: res,
       };
-      setHistory((prev) => [newItem, ...prev].slice(0, 20));
+      setHistory((prev) => [newItem, ...prev].slice(0, historyLimit));
     }
   };
 
@@ -1770,34 +1777,47 @@ export default function App() {
         id="history-printable"
         className="sidebar-container bg-slate-800/50 p-4"
       >
-        <div className="flex items-center justify-between mb-4 border-b border-slate-600 pb-2">
-          <div className="flex items-baseline gap-2">
-            <h2 className="text-xl font-bold text-yellow-400 print-black-text">
-              Historique
-            </h2>
-            <span className="text-xs text-slate-400 print-black-text font-mono">
-              {history.length} / 20
-            </span>
-          </div>
-          {history.length > 0 && (
-            <div className="flex gap-3 no-print">
-              <button
-                onClick={handlePrint}
-                className="text-slate-400 hover:text-white transition-colors bg-transparent"
-                title="Imprimer"
+        <div className="flex flex-col mb-4 border-b border-slate-600 pb-2">
+          <div className="flex items-center justify-between w-full">
+            {/* 1. TITRE ET COMPTEUR DISSOCIÉS */}
+            <div className="flex items-center gap-2">
+              <h2 className="text-lg font-bold text-yellow-400 print-black-text uppercase tracking-tighter">
+                Historique
+              </h2>
+              <div className="flex items-center bg-slate-900/50 px-2 py-0.5 rounded border border-slate-700">
+                <span className="text-sm font-bold text-white font-mono">{history.length}</span>
+                <span className="text-xs text-slate-500 font-mono">/{historyLimit}</span>
+              </div>
+              
+              {/* ROUE CRANTÉE DE RÉGLAGE */}
+              <button 
+                onClick={() => {
+                  const input = window.prompt("Capacité de l'historique (ex: 30, 50, 100) :", historyLimit.toString());
+                  if (input !== null) {
+                    const nouvelleValeur = parseInt(input);
+                    if (!isNaN(nouvelleValeur) && nouvelleValeur > 0) {
+                      setHistoryLimit(nouvelleValeur > 200 ? 200 : nouvelleValeur);
+                    }
+                  }
+                }}
+                className="text-slate-500 hover:text-yellow-400 transition-all hover:rotate-90 no-print"
               >
+                <SettingsIcon size={14} />
+              </button>
+            </div>
+
+            {/* 2. BOUTONS ACTIONS ALIGNÉS SUR LA MÊME LIGNE */}
+            <div className="flex items-center gap-3 no-print">
+              <button onClick={handlePrint} className="text-slate-400 hover:text-white transition-colors bg-transparent">
                 <PrinterIcon size={18} />
               </button>
-              <button
-                onClick={handleDownloadCSV}
-                className="flex items-center gap-1 text-green-600 hover:text-green-400 transition-colors text-xs font-bold bg-transparent"
-                title="Télécharger CSV Expert (Lune + Poids)"
-              >
+              <button onClick={handleDownloadCSV} className="flex items-center gap-1 text-green-600 hover:text-green-400 transition-colors text-[10px] font-bold bg-transparent">
                 <DownloadIcon size={18} /> (.csv)
               </button>
             </div>
-          )}
+          </div>
         </div>
+
         {history.length === 0 ? (
           <div className="text-slate-500 text-center italic mt-10 print-black-text">
             Aucun tirage enregistré...
@@ -2322,4 +2342,3 @@ export default function App() {
     </div>
   );
 }
-
