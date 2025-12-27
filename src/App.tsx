@@ -1289,6 +1289,59 @@ export default function App() {
       document.head.appendChild(style);
     }
   }, []);
+  // --- CORRECTIF CHIRURGICAL IMPRESSION (DOUBLE COLONNE & ANTI-COUPURE) ---
+  useEffect(() => {
+    const stylePrintId = 'boulotron-expert-print-final';
+    if (!document.getElementById(stylePrintId)) {
+      const stylePrint = document.createElement('style');
+      stylePrint.id = stylePrintId;
+      stylePrint.innerHTML = `
+        @media print {
+          @page { size: A4; margin: 10mm; }
+          body { background: white !important; color: black !important; overflow: visible !important; }
+          .no-print, .game-container, .infos-container { display: none !important; }
+          .app-wrapper { display: block !important; height: auto !important; }
+          
+          /* FORCE LE DÉPLIAGE TOTAL DE L'HISTORIQUE SANS COUPURE */
+          .sidebar-container { 
+            width: 100% !important; 
+            height: auto !important; 
+            overflow: visible !important; 
+            display: block !important; 
+            background: white !important; 
+            padding: 0 !important; 
+            border: none !important; 
+          }
+          
+          /* GRILLE 2 COLONNES POUR VOTRE POCHE */
+          .sidebar-container > div:last-child { 
+            display: grid !important; 
+            grid-template-columns: 1fr 1fr !important; 
+            gap: 15px !important; 
+            padding: 10px !important;
+            overflow: visible !important;
+          }
+
+          /* TICKETS EN NOIR ET BLANC PUR POUR VOTRE POCHE */
+          .sidebar-container div[style*="break-inside"] { 
+            background: white !important; 
+            border: 1.5pt solid black !important; 
+            color: black !important;
+            box-shadow: none !important;
+            padding: 8px !important;
+          }
+          
+          .text-white, .text-yellow-500, .text-cyan-400, .text-orange-400, .text-green-400, .text-red-500 { color: black !important; text-shadow: none !important; }
+          .bg-slate-200 { background: white !important; border: 1pt solid black !important; color: black !important; }
+          .bg-yellow-400 { background: #f0f0f0 !important; border: 1.5pt solid black !important; color: black !important; font-weight: bold !important; }
+          
+          /* MASQUAGE DE LA BARRE DE DÉFILEMENT INUTILE AU TABAC */
+          ::-webkit-scrollbar { display: none !important; }
+        }
+      `;
+      document.head.appendChild(stylePrint);
+    }
+  }, []);
   useEffect(() => {
     const scriptId = 'tailwind-cdn-script';
     if (!document.getElementById(scriptId)) {
