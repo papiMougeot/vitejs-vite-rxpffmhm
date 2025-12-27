@@ -595,103 +595,84 @@ function TapisVolant({
   const handleValidate = () => {
     let finalBalls = [...selectedNums];
     let finalStars = [...selectedStars];
+    setErrorMsg(null);
 
-    // 1. D'ABORD, ON RESPECTE LES QUOTAS (Les chiffres jaunes)
-    // Et on assure le "au moins 1" pour les Verts
+    // 1. DÉFINITION DU TERRITOIRE (LOI DU CONFINEMENT)
+    const activeDecades = decadeStatus.map((s, i) => s === 'required' ? i : null).filter(v => v !== null);
+    const hasGreenZones = activeDecades.length > 0;
+
+    // 2. CALCUL DES QUOTAS JAUNES (PLAFOND STRICT)
     for (let d = 0; d < 5; d++) {
-      const min = d * 10 + 1;
-      const max = d * 10 + 10;
-      let decadePool = [];
-
-      // On prépare le sac de la dizaine pour les quotas
-      if (decadeStatus[d] !== 'forbidden') {
-        for (let i = min; i <= max; i++) {
-          if (!finalBalls.includes(i) && !forbiddenNums.includes(i)) {
-            decadePool.push(i);
-          }
-        }
-      }
-
-      // A. On comble les quotas (ex: l'utilisateur a demandé "2" numéros ici via les boutons +)
-      const targetCount = decadeConstraints[d];
-      const currentCount = finalBalls.filter(
-        (n) => Math.ceil(n / 10) - 1 === d
-      ).length;
-      let needed = targetCount - currentCount;
-
-      if (needed > 0) {
-        for (let k = 0; k < needed; k++) {
-          if (decadePool.length === 0) break;
-          const randIndex = Math.floor(Math.random() * decadePool.length);
-          finalBalls.push(decadePool[randIndex]);
-          decadePool.splice(randIndex, 1);
-        }
-      }
-
-      // B. On assure la présence minimale si VERT (au moins 1)
-      // ATTENTION : On ne le fait que si le compteur est à 0. 
-      // Si le compteur est > 0, le quota ci-dessus a déjà fait le job.
-      if (decadeStatus[d] === 'required' && decadeConstraints[d] === 0) {
-        const hasNum = finalBalls.some((n) => Math.ceil(n / 10) - 1 === d);
-        if (!hasNum && decadePool.length > 0) {
-          const randIndex = Math.floor(Math.random() * decadePool.length);
-          finalBalls.push(decadePool[randIndex]);
-          decadePool.splice(randIndex, 1);
-        }
-      }
-    }
-
-    // 2. LE REMPLISSAGE FINAL (Logique Exclusive & Quota Strict)
-    if (finalBalls.length < 5) {
-      let pool = [];
-      
-      // QUESTION CRUCIALE : Y a-t-il des dizaines vertes activées ?
-      const hasGreenDecades = decadeStatus.includes('required');
-
-      for (let i = 1; i <= 50; i++) {
-        const dIndex = Math.ceil(i / 10) - 1;
-        const constraintVal = decadeConstraints[dIndex];
-
-        // RÈGLE D'OR PAPI MOUGEOT :
-        // Si l'utilisateur a mis un compteur (1, 2...), cette dizaine est FERMÉE pour le remplissage.
-        const isDecadeLockedByQuota = constraintVal > 0;
+      const target = decadeConstraints[d];
+      if (target > 0) {
+        const currentInD = finalBalls.filter(n => Math.ceil(n/10)-1 === d).length;
+        let needed = target - currentInD;
         
-        const isAvailable = 
-          !finalBalls.includes(i) &&
-          !forbiddenNums.includes(i) &&
-          decadeStatus[dIndex] !== 'forbidden' &&
-          !isDecadeLockedByQuota; 
-
-        if (isAvailable) {
-          if (hasGreenDecades) {
-            if (decadeStatus[dIndex] === 'required') {
-              pool.push(i);
-            }
-          } else {
-            pool.push(i);
-          }
+        let pool = [];
+        for (let i = (d*10)+1; i <= (d*10)+10; i++) {
+          if (!finalBalls.includes(i) && !forbiddenNums.includes(i)) pool.push(i);
         }
-      }
 
-      while (finalBalls.length < 5 && pool.length > 0) {
-        const randIndex = Math.floor(Math.random() * pool.length);
-        finalBalls.push(pool[randIndex]);
-        pool.splice(randIndex, 1);
+        if (needed > pool.length) {
+          setErrorMsg("Zone trop restreinte ! (Dizaine " + (d+1) + ")");
+          return;
+        }
+
+        while (needed > 0 && pool.length > 0) {
+          const rIdx = Math.floor(Math.random() * pool.length);
+          finalBalls.push(pool[rIdx]);
+          pool.splice(rIdx, 1);
+          needed--;
+        }
       }
     }
 
-    // 3. REMPLISSAGE DES ÉTOILES (inchangé)
+    // 3. REMPLISSAGE FINAL (HASARD CONFINÉ)
+    if (finalBalls.length < 5) {
+      let globalPool = [];
+      for (let i = 1; i <= 50; i++) {
+        const dIdx = Math.ceil(i/10) - 1;
+        
+        // La règle d'or : On ne pioche QUE dans les zones VERTES
+        // Si aucune zone n'est verte, on pioche dans tout ce qui n'est pas interdit (ROUGE/GRIS)
+        const isZoneAuthorized = hasGreenZones ? decadeStatus[dIdx] === 'required' : decadeStatus[dIdx] !== 'forbidden';
+        
+        // Important : On respecte aussi les quotas jaunes déjà remplis (on ne dépasse pas le chiffre jaune)
+        const isQuotaFull = decadeConstraints[dIdx] > 0 && finalBalls.filter(n => Math.ceil(n/10)-1 === dIdx).length >= decadeConstraints[dIdx];
+
+        if (!finalBalls.includes(i) && !forbiddenNums.includes(i) && isZoneAuthorized && !isQuotaFull) {
+          globalPool.push(i);
+        }
+      }
+
+      if (finalBalls.length < 5 && globalPool.length < (5 - finalBalls.length)) {
+        setErrorMsg("Zone trop restreinte !");
+        return;
+      }
+
+      while (finalBalls.length < 5 && globalPool.length > 0) {
+        const rIdx = Math.floor(Math.random() * globalPool.length);
+        finalBalls.push(globalPool[rIdx]);
+        globalPool.splice(rIdx, 1);
+      }
+    }
+
+    // 4. ÉTOILES (LOGIQUE STANDARD)
     if (finalStars.length < 2) {
-      let pool = [];
+      let sPool = [];
       for (let i = 1; i <= 12; i++) {
-        if (!finalStars.includes(i) && !forbiddenStars.includes(i))
-          pool.push(i);
+        if (!finalStars.includes(i) && !forbiddenStars.includes(i)) sPool.push(i);
       }
-      while (finalStars.length < 2 && pool.length > 0) {
-        const randIndex = Math.floor(Math.random() * pool.length);
-        finalStars.push(pool[randIndex]);
-        pool.splice(randIndex, 1);
+      while (finalStars.length < 2 && sPool.length > 0) {
+        const rIdx = Math.floor(Math.random() * sPool.length);
+        finalStars.push(sPool[rIdx]);
+        sPool.splice(rIdx, 1);
       }
+    }
+
+    if (finalBalls.length < 5) {
+      setErrorMsg("Zone trop restreinte !");
+      return;
     }
 
     onValidate(finalBalls, finalStars);
