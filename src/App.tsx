@@ -491,6 +491,7 @@ function TapisVolant({
       newStatus[dIndex] = 'required';
       setDecadeStatus(newStatus);
     }
+    setErrorMsg(null); // <--- AJOUT
   };
 
   const toggleStar = (n: number) => {
@@ -502,6 +503,7 @@ function TapisVolant({
     } else {
       if (selectedStars.length < 2) setSelectedStars([...selectedStars, n]);
     }
+    setErrorMsg(null); // <--- AJOUT
   };
 
   const updateConstraint = (dIndex: number, delta: number) => {
@@ -533,6 +535,7 @@ function TapisVolant({
     const newConstraints = [...decadeConstraints];
     newConstraints[dIndex] = newVal;
     setDecadeConstraints(newConstraints);
+    setErrorMsg(null); // <--- AJOUT
   };
 
   const toggleDecadeLabel = (dIndex: number) => {
@@ -549,6 +552,7 @@ function TapisVolant({
       newConstraints[dIndex] = 0;
       setDecadeConstraints(newConstraints);
     }
+    setErrorMsg(null); // <--- AJOUT
   };
 
   const handleMasterDizaines = () => {
@@ -576,6 +580,7 @@ function TapisVolant({
       setDecadeConstraints([0, 0, 0, 0, 0]);
       setDecadeStatus(['neutral', 'neutral', 'neutral', 'neutral', 'neutral']);
     }
+    setErrorMsg(null); // <--- AJOUT
   };
 
   const handleReset = () => {
@@ -614,8 +619,7 @@ function TapisVolant({
         }
 
         if (needed > pool.length) {
-          setErrorMsg("Zone trop restreinte ! (Dizaine " + (d+1) + ")");
-          return;
+          setErrorMsg("Sélection incomplète ! (Dizaine " + (d+1) + ")");
         }
 
         while (needed > 0 && pool.length > 0) {
@@ -646,7 +650,7 @@ function TapisVolant({
       }
 
       if (finalBalls.length < 5 && globalPool.length < (5 - finalBalls.length)) {
-        setErrorMsg("Zone trop restreinte !");
+        setErrorMsg("Sélection incomplète !");
         return;
       }
 
@@ -671,7 +675,7 @@ function TapisVolant({
     }
 
     if (finalBalls.length < 5) {
-      setErrorMsg("Zone trop restreinte !");
+      setErrorMsg("Sélection incomplète !");
       return;
     }
 
