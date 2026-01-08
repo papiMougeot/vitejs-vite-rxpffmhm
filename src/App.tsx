@@ -631,34 +631,75 @@ function TapisVolant({
       }
     }
 
-    // 3. REMPLISSAGE FINAL (HASARD CONFINÉ)
-    if (finalBalls.length < 5) {
-      let globalPool = [];
-      for (let i = 1; i <= 50; i++) {
-        const dIdx = Math.ceil(i/10) - 1;
-        
-        // La règle d'or : On ne pioche QUE dans les zones VERTES
-        // Si aucune zone n'est verte, on pioche dans tout ce qui n'est pas interdit (ROUGE/GRIS)
-        const isZoneAuthorized = hasGreenZones ? decadeStatus[dIdx] === 'required' : decadeStatus[dIdx] !== 'forbidden';
-        
-        // Important : On respecte aussi les quotas jaunes déjà remplis (on ne dépasse pas le chiffre jaune)
-        const isQuotaFull = decadeConstraints[dIdx] > 0 && finalBalls.filter(n => Math.ceil(n/10)-1 === dIdx).length >= decadeConstraints[dIdx];
+ // 3. REMPLISSAGE FINAL (HASARD CONFINÉ AVEC GARDE-FOU)
+    // On définit quelles dizaines sont obligatoirement attendues (en VERT)
+    const requiredDecades = decadeStatus
+      .map((status, index) => (status === 'required' ? index : null))
+      .filter((v) => v !== null) as number[];
 
-        if (!finalBalls.includes(i) && !forbiddenNums.includes(i) && isZoneAuthorized && !isQuotaFull) {
-          globalPool.push(i);
+    let success = false;
+    let attempts = 0;
+    let tempFinalBalls: number[] = [];
+
+    // BOUCLE DE SÉCURITÉ : On recommence tant que les zones vertes ne sont pas toutes servies
+    // On limite à 1000 essais pour éviter une boucle infinie en cas de conflit impossible
+    while (!success && attempts < 1000) {
+      attempts++;
+      tempFinalBalls = [...selectedNums]; // On repart de la base (numéros fétiches)
+      
+      // On remplit d'abord les quotas jaunes (priorité absolue)
+      for (let d = 0; d < 5; d++) {
+        const target = decadeConstraints[d];
+        if (target > 0) {
+          let pool = [];
+          for (let i = d * 10 + 1; i <= d * 10 + 10; i++) {
+            if (!tempFinalBalls.includes(i) && !forbiddenNums.includes(i)) pool.push(i);
+          }
+          let currentInD = tempFinalBalls.filter(n => Math.ceil(n/10)-1 === d).length;
+          let needed = target - currentInD;
+          while (needed > 0 && pool.length > 0) {
+            const rIdx = Math.floor(Math.random() * pool.length);
+            tempFinalBalls.push(pool[rIdx]);
+            pool.splice(rIdx, 1);
+            needed--;
+          }
         }
       }
 
-      if (finalBalls.length < 5 && globalPool.length < (5 - finalBalls.length)) {
-        setErrorMsg("Sélection incomplète !");
-        return;
+      // On complète jusqu'à 5 boules avec le hasard confiné (zones vertes ou autorisées)
+      if (tempFinalBalls.length < 5) {
+        let globalPool = [];
+        for (let i = 1; i <= 50; i++) {
+          const dIdx = Math.ceil(i / 10) - 1;
+          const isZoneAuthorized = hasGreenZones ? decadeStatus[dIdx] === 'required' : decadeStatus[dIdx] !== 'forbidden';
+          const isQuotaFull = decadeConstraints[dIdx] > 0 && tempFinalBalls.filter(n => Math.ceil(n/10)-1 === dIdx).length >= decadeConstraints[dIdx];
+          
+          if (!tempFinalBalls.includes(i) && !forbiddenNums.includes(i) && isZoneAuthorized && !isQuotaFull) {
+            globalPool.push(i);
+          }
+        }
+
+        while (tempFinalBalls.length < 5 && globalPool.length > 0) {
+          const rIdx = Math.floor(Math.random() * globalPool.length);
+          tempFinalBalls.push(globalPool[rIdx]);
+          globalPool.splice(rIdx, 1);
+        }
       }
 
-      while (finalBalls.length < 5 && globalPool.length > 0) {
-        const rIdx = Math.floor(Math.random() * globalPool.length);
-        finalBalls.push(globalPool[rIdx]);
-        globalPool.splice(rIdx, 1);
+      // --- LE TEST DE CONFORMITÉ ---
+      // On vérifie si CHAQUE dizaine requise est présente au moins une fois
+      const presentDecades = tempFinalBalls.map(n => Math.ceil(n/10)-1);
+      const allRequiredPresent = requiredDecades.every(dIdx => presentDecades.includes(dIdx));
+
+      if (allRequiredPresent && tempFinalBalls.length === 5) {
+        success = true;
+        finalBalls = tempFinalBalls;
       }
+    }
+
+    if (!success) {
+      setErrorMsg("Sélection impossible avec ces contraintes !");
+      return;
     }
 
     // 4. ÉTOILES (LOGIQUE STANDARD)
