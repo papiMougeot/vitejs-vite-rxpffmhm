@@ -4,15 +4,15 @@
 
 export const INFOS_TIRAGE = {
   titre_entete: 'Dernier tirage €Millions enregistré :',
-  numero_et_date: 'N° 1908 – vendredi 02/01/2026',
-  boules: ['08', '27', '42', '44', '46'],
-  etoiles: ['01', '10'],
-  rang: 'Rang : 83 104 635',
-  gagnants: '4 gagnants à 5+1',
-  gain_montant: 'Gain de 181 127 €',
+  numero_et_date: 'N° 1909 – mardi 06/01/2026',
+  boules: ['05', '14', '17', '18', '31'],
+  etoiles: ['10', '12'],
+  rang: 'Rang : 54 920 249',
+  gagnants: '3 gagnants à 5',
+  gain_montant: 'Gain de 204 841 €',
   gain_lieu: 'remporté en Europe',
-  my_million: 'My Million N° 5 214 040',
-  prochain_date: 'Prochain Tirage : mardi 06/01/2026',
-  prochain_jackpot: 'Jackpot de 41 000 000 €',
+  my_million: 'My Million N° 2 772 217',
+  prochain_date: 'Prochain Tirage : vendredi 09/01/2026',
+  prochain_jackpot: 'Jackpot de 53 000 000 €',
 };
 
