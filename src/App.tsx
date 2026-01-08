@@ -7,9 +7,9 @@ import { obtenirPhaseLunaire, PhaseLune } from './lune';
 // On importe les données, mais on les renomme "INFOS" juste pour ce fichier
 import { INFOS_TIRAGE as INFOS } from './dernierTirage';
 
-// =============================================================================
+// ======================================================================
 // 2. OUTILS & ICONES
-// =============================================================================
+//=====================================================================
 function SettingsIcon({ size = 18, className = '' }: any) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -598,56 +598,26 @@ function TapisVolant({
   // LE CŒUR DU SÉLECTRON - LOGIQUE DE VALIDATION & REMPLISSAGE
   // ------------------------------------------------------------------------------------------
   const handleValidate = () => {
-    let finalBalls = [...selectedNums];
-    let finalStars = [...selectedStars];
     setErrorMsg(null);
-
-    // 1. DÉFINITION DU TERRITOIRE (LOI DU CONFINEMENT)
-    const activeDecades = decadeStatus.map((s, i) => s === 'required' ? i : null).filter(v => v !== null);
-    const hasGreenZones = activeDecades.length > 0;
-
-    // 2. CALCUL DES QUOTAS JAUNES (PLAFOND STRICT)
-    for (let d = 0; d < 5; d++) {
-      const target = decadeConstraints[d];
-      if (target > 0) {
-        const currentInD = finalBalls.filter(n => Math.ceil(n/10)-1 === d).length;
-        let needed = target - currentInD;
-        
-        let pool = [];
-        for (let i = (d*10)+1; i <= (d*10)+10; i++) {
-          if (!finalBalls.includes(i) && !forbiddenNums.includes(i)) pool.push(i);
-        }
-
-        if (needed > pool.length) {
-          setErrorMsg("Sélection incomplète ! (Dizaine " + (d+1) + ")");
-        }
-
-        while (needed > 0 && pool.length > 0) {
-          const rIdx = Math.floor(Math.random() * pool.length);
-          finalBalls.push(pool[rIdx]);
-          pool.splice(rIdx, 1);
-          needed--;
-        }
-      }
-    }
-
- // 3. REMPLISSAGE FINAL (HASARD CONFINÉ AVEC GARDE-FOU)
-    // On définit quelles dizaines sont obligatoirement attendues (en VERT)
+    let finalBalls: number[] = [];
+    let finalStars: number[] = [...selectedStars];
+    
+    // 1. DÉFINITION DU TERRITOIRE
     const requiredDecades = decadeStatus
       .map((status, index) => (status === 'required' ? index : null))
       .filter((v) => v !== null) as number[];
+    const hasGreenZones = requiredDecades.length > 0;
 
     let success = false;
     let attempts = 0;
-    let tempFinalBalls: number[] = [];
 
-    // BOUCLE DE SÉCURITÉ : On recommence tant que les zones vertes ne sont pas toutes servies
-    // On limite à 1000 essais pour éviter une boucle infinie en cas de conflit impossible
+    // 2. BOUCLE DE SÉCURITÉ (LE GARDE-FOU)
+    // On recommence tant que toutes les zones vertes ne sont pas représentées
     while (!success && attempts < 1000) {
       attempts++;
-      tempFinalBalls = [...selectedNums]; // On repart de la base (numéros fétiches)
+      let tempFinalBalls = [...selectedNums];
       
-      // On remplit d'abord les quotas jaunes (priorité absolue)
+      // Quotas Jaunes (Plafond strict)
       for (let d = 0; d < 5; d++) {
         const target = decadeConstraints[d];
         if (target > 0) {
@@ -659,14 +629,13 @@ function TapisVolant({
           let needed = target - currentInD;
           while (needed > 0 && pool.length > 0) {
             const rIdx = Math.floor(Math.random() * pool.length);
-            tempFinalBalls.push(pool[rIdx]);
-            pool.splice(rIdx, 1);
+            tempFinalBalls.push(pool.splice(rIdx, 1)[0]);
             needed--;
           }
         }
       }
 
-      // On complète jusqu'à 5 boules avec le hasard confiné (zones vertes ou autorisées)
+      // Remplissage Hasard (Zones Vertes ou autorisées)
       if (tempFinalBalls.length < 5) {
         let globalPool = [];
         for (let i = 1; i <= 50; i++) {
@@ -678,16 +647,13 @@ function TapisVolant({
             globalPool.push(i);
           }
         }
-
         while (tempFinalBalls.length < 5 && globalPool.length > 0) {
           const rIdx = Math.floor(Math.random() * globalPool.length);
-          tempFinalBalls.push(globalPool[rIdx]);
-          globalPool.splice(rIdx, 1);
+          tempFinalBalls.push(globalPool.splice(rIdx, 1)[0]);
         }
       }
 
-      // --- LE TEST DE CONFORMITÉ ---
-      // On vérifie si CHAQUE dizaine requise est présente au moins une fois
+      // TEST DE CONFORMITÉ : Est-ce que chaque zone verte a au moins une boule ?
       const presentDecades = tempFinalBalls.map(n => Math.ceil(n/10)-1);
       const allRequiredPresent = requiredDecades.every(dIdx => presentDecades.includes(dIdx));
 
@@ -702,7 +668,7 @@ function TapisVolant({
       return;
     }
 
-    // 4. ÉTOILES (LOGIQUE STANDARD)
+    // 4. ÉTOILES
     if (finalStars.length < 2) {
       let sPool = [];
       for (let i = 1; i <= 12; i++) {
@@ -710,14 +676,8 @@ function TapisVolant({
       }
       while (finalStars.length < 2 && sPool.length > 0) {
         const rIdx = Math.floor(Math.random() * sPool.length);
-        finalStars.push(sPool[rIdx]);
-        sPool.splice(rIdx, 1);
+        finalStars.push(sPool.splice(rIdx, 1)[0]);
       }
-    }
-
-    if (finalBalls.length < 5) {
-      setErrorMsg("Sélection incomplète !");
-      return;
     }
 
     onValidate(finalBalls, finalStars);
