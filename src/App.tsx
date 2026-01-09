@@ -1,3 +1,4 @@
+import { MENTIONS_LEGALES as LEGAL } from './mentionsLegales';
 import React, { useState, useEffect, useRef } from 'react';
 // IMPORT DE LA BIBLIOTHÈQUE DE DONNÉES
 import { LE_CODEX } from './boulotron-data';
@@ -2315,6 +2316,25 @@ export default function App() {
             >
               coditor@pm.me
             </a>
+            <div className="mt-4 space-y-2 text-center max-w-lg mx-auto border-t border-white/5 pt-4">
+              <p className="text-[10px] font-bold text-white uppercase tracking-widest opacity-80">
+                {LEGAL.phase}
+              </p>
+              <p className="text-[9px] text-white leading-relaxed opacity-70">
+                {LEGAL.role}
+              </p>
+              <p className="text-[9px] text-white italic opacity-60">
+                {LEGAL.avertissement}
+              </p>
+              <div className="pt-2">
+                <p className="text-[10px] text-white font-bold uppercase">
+                  {LEGAL.jeuResponsableTitre}
+                </p>
+                <p className="text-[9px] text-white opacity-70">
+                  {LEGAL.jeuResponsableTexte}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -2446,6 +2466,7 @@ export default function App() {
           </div>
         </div>
       </div>
+    
     </div>
   );
 }
