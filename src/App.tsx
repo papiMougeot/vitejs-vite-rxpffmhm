@@ -433,6 +433,8 @@ function TapisVolant({
     'neutral',
     'neutral',
   ]);
+  const [randomDecadesCount, setRandomDecadesCount] = useState<number>(0);
+  const [showRandomMenu, setShowRandomMenu] = useState(false);
   const [masterStep, setMasterStep] = useState<number>(0);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
@@ -582,7 +584,27 @@ function TapisVolant({
     }
     setErrorMsg(null); // <--- AJOUT
   };
-
+  const handleSelectRandomDecades = (count: number) => {
+    setRandomDecadesCount(count);
+    setShowRandomMenu(false);
+    handleReset(); 
+    
+    if (count === 5) {
+      setDecadeConstraints([1, 1, 1, 1, 1]);
+      setDecadeStatus(['required', 'required', 'required', 'required', 'required']);
+    } else if (count > 0) {
+      const indices = [0, 1, 2, 3, 4];
+      const shuffled = indices.sort(() => 0.5 - Math.random());
+      const selected = shuffled.slice(0, count);
+      
+      const newStatus: DecadeState[] = ['neutral', 'neutral', 'neutral', 'neutral', 'neutral'];
+      selected.forEach(idx => {
+        newStatus[idx] = 'required';
+      });
+      setDecadeStatus(newStatus);
+      setInfoMessage(`Sélectron : ${count} dizaines choisies au hasard !`);
+    }
+  };
   const handleReset = () => {
     setSelectedNums([]);
     setForbiddenNums([]);
@@ -598,70 +620,76 @@ function TapisVolant({
   // LE CŒUR DU SÉLECTRON - LOGIQUE DE VALIDATION & REMPLISSAGE
   // ------------------------------------------------------------------------------------------
   const handleValidate = () => {
-    let finalBalls = [...selectedNums];
-    let finalStars = [...selectedStars];
     setErrorMsg(null);
+    let finalBalls: number[] = [];
+    let finalStars: number[] = [...selectedStars];
+    
+    // 1. DÉFINITION DU TERRITOIRE (Les zones imposées en VERT)
+    const requiredDecades = decadeStatus
+      .map((status, index) => (status === 'required' ? index : null))
+      .filter((v) => v !== null) as number[];
+    const hasGreenZones = requiredDecades.length > 0;
 
-    // 1. DÉFINITION DU TERRITOIRE (LOI DU CONFINEMENT)
-    const activeDecades = decadeStatus.map((s, i) => s === 'required' ? i : null).filter(v => v !== null);
-    const hasGreenZones = activeDecades.length > 0;
+    let success = false;
+    let attempts = 0;
 
-    // 2. CALCUL DES QUOTAS JAUNES (PLAFOND STRICT)
-    for (let d = 0; d < 5; d++) {
-      const target = decadeConstraints[d];
-      if (target > 0) {
-        const currentInD = finalBalls.filter(n => Math.ceil(n/10)-1 === d).length;
-        let needed = target - currentInD;
-        
-        let pool = [];
-        for (let i = (d*10)+1; i <= (d*10)+10; i++) {
-          if (!finalBalls.includes(i) && !forbiddenNums.includes(i)) pool.push(i);
+    // 2. LA BOUCLE DE SÉCURITÉ (On recommence tant que ce n'est pas parfait)
+    while (!success && attempts < 1000) {
+      attempts++;
+      let tempFinalBalls = [...selectedNums];
+      
+      // A. Respect des quotas JAUNES (Plafond strict)
+      for (let d = 0; d < 5; d++) {
+        const target = decadeConstraints[d];
+        if (target > 0) {
+          let pool = [];
+          for (let i = d * 10 + 1; i <= d * 10 + 10; i++) {
+            if (!tempFinalBalls.includes(i) && !forbiddenNums.includes(i)) pool.push(i);
+          }
+          let currentInD = tempFinalBalls.filter(n => Math.ceil(n/10)-1 === d).length;
+          let needed = target - currentInD;
+          while (needed > 0 && pool.length > 0) {
+            const rIdx = Math.floor(Math.random() * pool.length);
+            tempFinalBalls.push(pool.splice(rIdx, 1)[0]);
+            needed--;
+          }
         }
+      }
 
-        if (needed > pool.length) {
-          setErrorMsg("Sélection incomplète ! (Dizaine " + (d+1) + ")");
+      // B. Remplissage par le HASARD (Uniquement dans les zones VERTES si elles existent)
+      if (tempFinalBalls.length < 5) {
+        let globalPool = [];
+        for (let i = 1; i <= 50; i++) {
+          const dIdx = Math.ceil(i / 10) - 1;
+          const isZoneAuthorized = hasGreenZones ? decadeStatus[dIdx] === 'required' : decadeStatus[dIdx] !== 'forbidden';
+          const isQuotaFull = decadeConstraints[dIdx] > 0 && tempFinalBalls.filter(n => Math.ceil(n/10)-1 === dIdx).length >= decadeConstraints[dIdx];
+          
+          if (!tempFinalBalls.includes(i) && !forbiddenNums.includes(i) && isZoneAuthorized && !isQuotaFull) {
+            globalPool.push(i);
+          }
         }
+        while (tempFinalBalls.length < 5 && globalPool.length > 0) {
+          const rIdx = Math.floor(Math.random() * globalPool.length);
+          tempFinalBalls.push(globalPool.splice(rIdx, 1)[0]);
+        }
+      }
 
-        while (needed > 0 && pool.length > 0) {
-          const rIdx = Math.floor(Math.random() * pool.length);
-          finalBalls.push(pool[rIdx]);
-          pool.splice(rIdx, 1);
-          needed--;
-        }
+      // C. LE CONTRÔLE TECHNIQUE : Est-ce que chaque zone verte a au moins une boule ?
+      const presentDecades = tempFinalBalls.map(n => Math.ceil(n/10)-1);
+      const allRequiredPresent = requiredDecades.every(dIdx => presentDecades.includes(dIdx));
+
+      if (allRequiredPresent && tempFinalBalls.length === 5) {
+        success = true;
+        finalBalls = tempFinalBalls;
       }
     }
 
-    // 3. REMPLISSAGE FINAL (HASARD CONFINÉ)
-    if (finalBalls.length < 5) {
-      let globalPool = [];
-      for (let i = 1; i <= 50; i++) {
-        const dIdx = Math.ceil(i/10) - 1;
-        
-        // La règle d'or : On ne pioche QUE dans les zones VERTES
-        // Si aucune zone n'est verte, on pioche dans tout ce qui n'est pas interdit (ROUGE/GRIS)
-        const isZoneAuthorized = hasGreenZones ? decadeStatus[dIdx] === 'required' : decadeStatus[dIdx] !== 'forbidden';
-        
-        // Important : On respecte aussi les quotas jaunes déjà remplis (on ne dépasse pas le chiffre jaune)
-        const isQuotaFull = decadeConstraints[dIdx] > 0 && finalBalls.filter(n => Math.ceil(n/10)-1 === dIdx).length >= decadeConstraints[dIdx];
-
-        if (!finalBalls.includes(i) && !forbiddenNums.includes(i) && isZoneAuthorized && !isQuotaFull) {
-          globalPool.push(i);
-        }
-      }
-
-      if (finalBalls.length < 5 && globalPool.length < (5 - finalBalls.length)) {
-        setErrorMsg("Sélection incomplète !");
-        return;
-      }
-
-      while (finalBalls.length < 5 && globalPool.length > 0) {
-        const rIdx = Math.floor(Math.random() * globalPool.length);
-        finalBalls.push(globalPool[rIdx]);
-        globalPool.splice(rIdx, 1);
-      }
+    if (!success) {
+      setErrorMsg("Combinaison impossible ! Libérez des contraintes.");
+      return;
     }
 
-    // 4. ÉTOILES (LOGIQUE STANDARD)
+    // 3. ÉTOILES (Logique standard)
     if (finalStars.length < 2) {
       let sPool = [];
       for (let i = 1; i <= 12; i++) {
@@ -669,14 +697,8 @@ function TapisVolant({
       }
       while (finalStars.length < 2 && sPool.length > 0) {
         const rIdx = Math.floor(Math.random() * sPool.length);
-        finalStars.push(sPool[rIdx]);
-        sPool.splice(rIdx, 1);
+        finalStars.push(sPool.splice(rIdx, 1)[0]);
       }
-    }
-
-    if (finalBalls.length < 5) {
-      setErrorMsg("Sélection incomplète !");
-      return;
     }
 
     onValidate(finalBalls, finalStars);
@@ -716,23 +738,51 @@ function TapisVolant({
         <div className="absolute top-0 left-0 w-full h-2 bg-yellow-400 opacity-50"></div>
         <div className="absolute bottom-0 left-0 w-full h-2 bg-yellow-400 opacity-50"></div>
         <div className="w-full md:w-1/4 bg-slate-800/50 rounded p-2 border border-slate-600 flex flex-col gap-2 pt-8">
-          <div
-            onClick={handleMasterDizaines}
-            className={`cursor-pointer select-none transition-all active:scale-95 hover:text-white ${titleHeightClass} ${
-              masterStep > 0
-                ? 'text-green-400 text-shadow-glow'
-                : 'text-yellow-400'
-            }`}
-          >
-            <h3 className="font-bold text-center text-xs uppercase flex items-center gap-2">
-              DIZAINES{' '}
-              {masterStep === 1 && (
-                <span className="text-[10px] bg-green-500 text-black px-1 rounded">
-                  1-1
-                </span>
-              )}{' '}
-              {masterStep === 2 && <CheckIcon size={14} />}
-            </h3>
+        <div className="relative">
+            <div
+              onClick={() => setShowRandomMenu(!showRandomMenu)}
+              className={`cursor-pointer select-none transition-all active:scale-95 hover:text-white ${titleHeightClass} ${
+                randomDecadesCount > 0 ? 'text-green-400 text-shadow-glow' : 'text-yellow-400'
+              }`}
+            >
+              <h3 className="font-bold text-center text-xs uppercase flex items-center gap-2">
+                DIZAINES {randomDecadesCount > 0 && (
+                  <span className="text-[10px] bg-green-500 text-black px-1 rounded animate-pulse">
+                    ALEA {randomDecadesCount}
+                  </span>
+                )}
+              </h3>
+            </div>
+
+            {showRandomMenu && (
+              <div className="absolute top-full left-0 w-48 bg-slate-900 border-2 border-yellow-500 rounded shadow-2xl z-[110] flex flex-col p-1 animate-in fade-in slide-in-from-top-1">
+                <div className="text-[9px] text-slate-500 text-center mb-1 uppercase font-bold border-b border-slate-800 pb-1">
+                  Répartir sur :
+                </div>
+                {[1, 2, 3, 4, 5].map(n => (
+                  <button
+                    key={n}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSelectRandomDecades(n);
+                    }}
+                    className="text-[10px] py-2 hover:bg-yellow-600 hover:text-white rounded transition-colors uppercase font-bold text-slate-200 text-center bg-transparent border-none cursor-pointer"
+                  >
+                    {n} {n === 1 ? 'Dizaine' : 'Dizaines'}
+                  </button>
+                ))}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSelectRandomDecades(0);
+                    setShowRandomMenu(false);
+                  }}
+                  className="text-[10px] py-2 mt-1 border-t border-slate-700 text-red-400 hover:bg-red-900/30 font-bold text-center bg-transparent cursor-pointer"
+                >
+                  ANNULER
+                </button>
+              </div>
+            )}
           </div>
           {[0, 1, 2, 3, 4].map((d) => (
             <div
