@@ -1239,16 +1239,16 @@ function PointingHand({ phase }: { phase: GamePhase }) {
   const getPositionClass = () => {
     switch (phase) {
       case 'idle':
-        return 'translate-x-[8rem] translate-y-[2rem]';
+        return 'translate-x-[8rem] translate-y-[-2rem]';
       case 'step1_right':
-        return 'translate-x-[0rem] translate-y-[2rem]';
+        return 'translate-x-[0rem] translate-y-[-2rem]';
       case 'step2_middle':
-        return 'translate-x-[-8rem] translate-y-[2rem]';
+        return 'translate-x-[-8rem] translate-y-[-2rem]';
       case 'step3_left':
-        return 'translate-x-[0rem] translate-y-[-17rem] rotate-0';
+        return 'translate-x-[0rem] translate-y-[-21rem] rotate-0';
       case 'finished':
       case 'bug':
-        return 'translate-x-[0rem] translate-y-[11rem]';
+        return 'translate-x-[0rem] translate-y-[9rem]';
       default:
         return 'hidden';
     }
