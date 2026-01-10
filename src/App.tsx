@@ -2301,39 +2301,26 @@ export default function App() {
                   : 'text-sm sm:text-lg'
               }`}
             >
-              {getInstructionMessage()}
-            </div>
+           </div>
           </div>
 
-          <div className="mt-8 flex flex-col items-center text-center opacity-80 hover:opacity-100 transition-opacity duration-500">
+          <div className="mt-4 pt-4 border-t border-white/10 text-center">
             <PapiAvatar />
-            <p className="text-yellow-500 font-serif italic text-base text-shadow px-4">
+            <p className="text-yellow-500 font-serif italic text-sm mb-2">
               "Le hasard, ça se travaille ! La chance, ça se tente !"
             </p>
-            <a
-              href="mailto:coditor@pm.me?subject=Message pour le Grand Maître du Boulotron"
-              className="text-cyan-400 font-serif text-base mt-1 transition-all duration-300 hover:scale-[1.1] hover:font-bold cursor-pointer block"
-            >
+            
+            <a href="mailto:coditor@pm.me" className="text-cyan-400 text-xs transition-all mb-2 block">
               coditor@pm.me
             </a>
-            <div className="mt-4 space-y-2 text-center max-w-lg mx-auto border-t border-white/5 pt-4">
-              <p className="text-[10px] font-bold text-white uppercase tracking-widest opacity-80">
-                {LEGAL.phase}
+            
+            <div className="text-[10px] text-white/60 leading-none">
+              <p className="font-bold uppercase tracking-widest mb-1 text-white/80">
+                ◀ PHASE DE TEST & EXPÉRIMENTATION - APPLICATION 100% GRATUITE ▶
               </p>
-              <p className="text-[9px] text-white leading-relaxed opacity-70">
-                {LEGAL.role}
-              </p>
-              <p className="text-[9px] text-white italic opacity-60">
-                {LEGAL.avertissement}
-              </p>
-              <div className="pt-2">
-                <p className="text-[10px] text-white font-bold uppercase">
-                  {LEGAL.jeuResponsableTitre}
-                </p>
-                <p className="text-[9px] text-white opacity-70">
-                  {LEGAL.jeuResponsableTexte}
-                </p>
-              </div>
+              <p>Le Boulotron est un outil indépendant d'aide à la décision.</p>
+              <p>Les analyses sont basées sur l'historique officiel des tirages de la FDJ.</p>
+              <p>Non affilié à la FDJ. Suggestions aléatoires sans garantie de gain.</p>
             </div>
           </div>
         </div>
