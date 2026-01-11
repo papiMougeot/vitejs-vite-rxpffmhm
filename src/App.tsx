@@ -1409,9 +1409,8 @@ export default function App() {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [historyLimit, setHistoryLimit] = useState<number>(20);
   // NOUVEAU: Message du panneau central (Information)
-  const [infoMessage, setInfoMessage] = useState<string>(
-    "La Caisse à Outils de l'€Millions"
-  );
+  const [infoMessage, setInfoMessage] = useState<string>("La Caisse à Outils de l'€Millions");
+ 
   const [effects, setEffects] = useState<{
     left: ScreenEffect;
     mid: ScreenEffect;
