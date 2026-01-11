@@ -1,4 +1,3 @@
-import { MENTIONS_LEGALES as LEGAL } from './mentionsLegales';
 import React, { useState, useEffect, useRef } from 'react';
 // IMPORT DE LA BIBLIOTHÈQUE DE DONNÉES
 import { LE_CODEX } from './boulotron-data';
@@ -99,7 +98,6 @@ function BanIcon({ size = 16, className = '' }: any) {
 
 function VolumeIcon({
   size = 24,
-  color = 'currentColor',
   className = '',
   style = {},
 }: any) {
@@ -124,8 +122,7 @@ function VolumeIcon({
 }
 function MuteIcon({
   size = 24,
-  color = 'currentColor',
-  className = '',
+   className = '',
   style = {},
 }: any) {
   return (
@@ -150,8 +147,7 @@ function MuteIcon({
 }
 function HandIcon({
   size = 64,
-  color = 'currentColor',
-  className = '',
+   className = '',
   style = {},
 }: any) {
   return (
@@ -286,63 +282,63 @@ function PapiAvatar() {
 }
 
 // --- BOULOSCOPE ---
-function DecadeBouloscope({ balls }: { balls: number[] }) {
-  const dist = [0, 0, 0, 0, 0];
-  balls.forEach((n) => {
-    const dIndex = Math.ceil(n / 10) - 1;
-    if (dIndex >= 0 && dIndex < 5) dist[dIndex]++;
-  });
+// function DecadeBouloscope({ balls }: { balls: number[] }) {
+//   const dist = [0, 0, 0, 0, 0];
+//   balls.forEach((n) => {
+//     const dIndex = Math.ceil(n / 10) - 1;
+//     if (dIndex >= 0 && dIndex < 5) dist[dIndex]++;
+//   });
 
-  // 1. On identifie les dizaines qui contiennent au moins une boule
-  const indicesSortis = dist
-    .map((count, i) => (count > 0 ? i + 1 : null))
-    .filter((v) => v !== null);
+//   // 1. On identifie les dizaines qui contiennent au moins une boule
+//   const indicesSortis = dist
+//     .map((count, i) => (count > 0 ? i + 1 : null))
+//     .filter((v) => v !== null);
 
-  // 2. On vérifie si une dizaine a fait le "Grand Chelem" (les 5 boules)
-  const grandChelemIndex = dist.findIndex((count) => count === 5);
+//   // 2. On vérifie si une dizaine a fait le "Grand Chelem" (les 5 boules)
+//   const grandChelemIndex = dist.findIndex((count) => count === 5);
 
-  // 3. Préparation du libellé visuel
-  let libelle = "";
-  if (grandChelemIndex !== -1) {
-    libelle = `Tous les numéros sont sortis dizaine : ${grandChelemIndex + 1}`;
-  } else {
-    libelle = `Dizaines sorties : ${indicesSortis.join("")}`;
-  }
+//   // 3. Préparation du libellé visuel
+//   let libelle = "";
+//   if (grandChelemIndex !== -1) {
+//     libelle = `Tous les numéros sont sortis dizaine : ${grandChelemIndex + 1}`;
+//   } else {
+//     libelle = `Dizaines sorties : ${indicesSortis.join("")}`;
+//   }
 
-  return (
-    <div className="w-full mt-2 bg-slate-900/50 rounded p-2 border border-slate-700/50">
-      {/* Les barres de progression visuelles */}
-      <div className="flex justify-between items-end gap-1 h-12 px-2 mb-2">
-        {dist.map((count, i) => (
-          <div key={i} className="flex flex-col items-center justify-end h-full w-1/5">
-            <div className={`mb-1 text-[9px] font-bold ${count > 0 ? 'text-cyan-400' : 'text-slate-600'}`}>
-              {count > 0 ? `${count}b` : ""}
-            </div>
-            <div className="w-full bg-slate-800 rounded-t-sm relative overflow-hidden" style={{ height: '60%' }}>
-              <div
-                className={`absolute bottom-0 left-0 w-full transition-all duration-500 ${
-                  count === 5 ? 'bg-yellow-400 shadow-[0_0_10px_gold]' : 'bg-cyan-600'
-                }`}
-                style={{ height: `${count * 20}%` }}
-              ></div>
-            </div>
-          </div>
-        ))}
-      </div>
+//   return (
+//     <div className="w-full mt-2 bg-slate-900/50 rounded p-2 border border-slate-700/50">
+//       {/* Les barres de progression visuelles */}
+//       <div className="flex justify-between items-end gap-1 h-12 px-2 mb-2">
+//         {dist.map((count, i) => (
+//           <div key={i} className="flex flex-col items-center justify-end h-full w-1/5">
+//             <div className={`mb-1 text-[9px] font-bold ${count > 0 ? 'text-cyan-400' : 'text-slate-600'}`}>
+//               {count > 0 ? `${count}b` : ""}
+//             </div>
+//             <div className="w-full bg-slate-800 rounded-t-sm relative overflow-hidden" style={{ height: '60%' }}>
+//               <div
+//                 className={`absolute bottom-0 left-0 w-full transition-all duration-500 ${
+//                   count === 5 ? 'bg-yellow-400 shadow-[0_0_10px_gold]' : 'bg-cyan-600'
+//                 }`}
+//                 style={{ height: `${count * 20}%` }}
+//               ></div>
+//             </div>
+//           </div>
+//         ))}
+//       </div>
       
-      {/* Le nouveau libellé dynamique */}
-      <div className="flex justify-center items-center pt-2 border-t border-slate-700/50">
-        <div className={`text-[10px] font-bold font-mono tracking-wider px-2 py-1 rounded border ${
-          grandChelemIndex !== -1 
-            ? 'bg-yellow-900/30 border-yellow-500 text-yellow-400 animate-pulse' 
-            : 'bg-slate-950 border-cyan-900/50 text-cyan-400'
-        }`}>
-          {libelle}
-        </div>
-      </div>
-    </div>
-  );
-}
+//       {/* Le nouveau libellé dynamique */}
+//       <div className="flex justify-center items-center pt-2 border-t border-slate-700/50">
+//         <div className={`text-[10px] font-bold font-mono tracking-wider px-2 py-1 rounded border ${
+//           grandChelemIndex !== -1 
+//             ? 'bg-yellow-900/30 border-yellow-500 text-yellow-400 animate-pulse' 
+//             : 'bg-slate-950 border-cyan-900/50 text-cyan-400'
+//         }`}>
+//           {libelle}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
 
 // --- LECTEUR DE CODEX (MODALE) ---
 function CodexReader({
@@ -436,7 +432,7 @@ function TapisVolant({
   ]);
   const [randomDecadesCount, setRandomDecadesCount] = useState<number>(0);
   const [showRandomMenu, setShowRandomMenu] = useState(false);
-  const [masterStep, setMasterStep] = useState<number>(0);
+  // const [masterStep, setMasterStep] = useState<number>(0);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
@@ -558,33 +554,33 @@ function TapisVolant({
     setErrorMsg(null); // <--- AJOUT
   };
 
-  const handleMasterDizaines = () => {
-    let nextStep = (masterStep + 1) % 3;
-    setMasterStep(nextStep);
-    if (nextStep === 1) {
-      setDecadeConstraints([1, 1, 1, 1, 1]);
-      setDecadeStatus([
-        'required',
-        'required',
-        'required',
-        'required',
-        'required',
-      ]);
-    } else if (nextStep === 2) {
-      setDecadeConstraints([0, 0, 0, 0, 0]);
-      setDecadeStatus([
-        'required',
-        'required',
-        'required',
-        'required',
-        'required',
-      ]);
-    } else {
-      setDecadeConstraints([0, 0, 0, 0, 0]);
-      setDecadeStatus(['neutral', 'neutral', 'neutral', 'neutral', 'neutral']);
-    }
-    setErrorMsg(null); // <--- AJOUT
-  };
+  // const handleMasterDizaines = () => {
+  //   let nextStep = (masterStep + 1) % 3;
+  //   setMasterStep(nextStep);
+  //   if (nextStep === 1) {
+  //     setDecadeConstraints([1, 1, 1, 1, 1]);
+  //     setDecadeStatus([
+  //       'required',
+  //       'required',
+  //       'required',
+  //       'required',
+  //       'required',
+  //     ]);
+  //   } else if (nextStep === 2) {
+  //     setDecadeConstraints([0, 0, 0, 0, 0]);
+  //     setDecadeStatus([
+  //       'required',
+  //       'required',
+  //       'required',
+  //       'required',
+  //       'required',
+  //     ]);
+  //   } else {
+  //     setDecadeConstraints([0, 0, 0, 0, 0]);
+  //     setDecadeStatus(['neutral', 'neutral', 'neutral', 'neutral', 'neutral']);
+  //   }
+  //   setErrorMsg(null); // <--- AJOUT
+  // };
   const handleSelectRandomDecades = (count: number) => {
     setRandomDecadesCount(count);
     setShowRandomMenu(false);
@@ -603,7 +599,7 @@ function TapisVolant({
         newStatus[idx] = 'required';
       });
       setDecadeStatus(newStatus);
-      setInfoMessage(`Sélectron : ${count} dizaines choisies au hasard !`);
+      // setInfoMessage(`Sélectron : ${count} dizaines choisies au hasard !`);
     }
   };
   const handleReset = () => {
@@ -613,7 +609,7 @@ function TapisVolant({
     setForbiddenStars([]);
     setDecadeConstraints([0, 0, 0, 0, 0]);
     setDecadeStatus(['neutral', 'neutral', 'neutral', 'neutral', 'neutral']);
-    setMasterStep(0);
+    // setMasterStep(0);
     setErrorMsg(null);
   };
 
@@ -1408,7 +1404,7 @@ export default function App() {
   const [rightVal, setRightVal] = useState<number>(0);
   const [midVal, setMidVal] = useState<number>(0);
   const [leftVal, setLeftVal] = useState<number>(0);
-  const [finalRank, setFinalRank] = useState<number | null>(null);
+  const [_finalRank, setFinalRank] = useState<number | null>(null);
   const [resultData, setResultData] = useState<ResultData | null>(null);
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [historyLimit, setHistoryLimit] = useState<number>(20);
@@ -1810,9 +1806,9 @@ export default function App() {
   const isLampGreen = ['step1_right', 'step2_middle', 'step3_left'].includes(
     phase
   );
-  const isAnySpinning = ['step1_right', 'step2_middle', 'step3_left'].includes(
-    phase
-  );
+  // const isAnySpinning = ['step1_right', 'step2_middle', 'step3_left'].includes(
+  //   phase
+  // );
 
   // --- LOGIQUE INSTRUCTION (BANDEAU BLEU) ---
   const getInstructionMessage = () => {
@@ -2301,6 +2297,10 @@ export default function App() {
                   : 'text-sm sm:text-lg'
               }`}
             >
+              {phase === 'bug' 
+        ? "Y'A UN BUG ! (Cliquez pour réinitialiser)"
+        : getInstructionMessage()
+      }
            </div>
           </div>
 
