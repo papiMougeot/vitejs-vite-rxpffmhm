@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 // IMPORT DE LA BIBLIOTHÈQUE DE DONNÉES
 import { LE_CODEX } from './boulotron-data';
+import { LeSaviezVousModal } from './LeSaviezVousModal';
 // IMPORT DE L'EXPERT LUNAIRE (Le Cerveau)
 import { obtenirPhaseLunaire, PhaseLune } from './lune';
 
@@ -434,7 +435,7 @@ function TapisVolant({
   const [showRandomMenu, setShowRandomMenu] = useState(false);
   // const [masterStep, setMasterStep] = useState<number>(0);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
+  const [showLeSaviezVous, setShowLeSaviezVous] = useState(false);
   useEffect(() => {
     if (initialNums.length > 0) {
       const newConstraints = [0, 0, 0, 0, 0];
@@ -721,6 +722,12 @@ function TapisVolant({
       className="absolute inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in zoom-in duration-300"
       onClick={onClose}
     >
+      {showLeSaviezVous && (
+  <LeSaviezVousModal
+    isOpen={showLeSaviezVous}
+    onClose={() => setShowLeSaviezVous(false)}
+  />
+)}
       <div
         className="relative w-full max-w-4xl bg-gradient-to-br from-purple-900 to-indigo-900 border-4 border-yellow-500 rounded-xl shadow-2xl p-4 m-2 flex flex-col md:flex-row gap-4 overflow-hidden items-start pt-8 pb-8"
         onClick={(e) => e.stopPropagation()}
@@ -840,11 +847,24 @@ function TapisVolant({
           )}
         </div>
         <div className="flex-1 flex flex-col pt-8">
-          <h3
-            className={`style-jackpot text-3xl text-yellow-400 tracking-widest ${titleHeightClass}`}
-          >
-            SÉLECTRON
-          </h3>
+        <div className={`flex items-center justify-center gap-3 ${titleHeightClass}`}>
+  <h3 className="style-jackpot text-3xl text-yellow-400 tracking-widest">
+    SÉLECTRON
+  </h3>
+  <button
+  onClick={(e) => {
+    e.stopPropagation();
+    setShowLeSaviezVous(true);
+  }}
+  className="text-yellow-400 hover:text-yellow-300 transition-all hover:scale-110 active:scale-95 bg-transparent cursor-pointer animate-pulse"
+  title="Le saviez-vous ?"
+  style={{
+    filter: 'drop-shadow(0 0 8px rgba(250, 204, 21, 0.8)) drop-shadow(0 0 15px rgba(250, 204, 21, 0.5))'
+  }}
+>
+  <span className="text-2xl" role="img" aria-label="ampoule">💡</span>
+</button>
+</div>
           <div className="flex flex-col gap-2 mt-2">
             {[0, 1, 2, 3, 4].map((decadeIndex) => (
               <div
