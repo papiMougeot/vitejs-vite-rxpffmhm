@@ -4,15 +4,15 @@
 
 export const INFOS_TIRAGE = {
   titre_entete: 'Dernier tirage €Millions enregistré :',
-  numero_et_date: 'N° 1927 – mardi 10/03/2026',
-  boules: ['12', '14', '27', '44', '50'],
-  etoiles: ['04', '12'],
-  rang: 'Rang : 102 704 354',
-  gagnants: '1 gagnant à 5+2',
-  gain_montant: 'Gain de 209 527 211 €',
-  gain_lieu: 'remporté au Royaume Uni',
-  my_million: 'My Million N° 2 808 208',
-  prochain_date: 'Prochain Tirage : vendredi 13/03/2026',
-  prochain_jackpot: 'Jackpot de 17 000 000 €',
+  numero_et_date: 'N° 1928 – vendredi 13/03/2026',
+  boules: ['13', '17', '26', '41', '48'],
+  etoiles: ['04', '10'],
+  rang: 'Rang : 108 232 116',
+  gagnants: '2 gagnants à 5+1',
+  gain_montant: 'Gain de 415 148 €',
+  gain_lieu: 'remporté en Europe dont aucun en France',
+  my_million: 'My Million N° 612 918',
+  prochain_date: 'Prochain Tirage : mardi 17/03/2026',
+  prochain_jackpot: 'Jackpot de 26 000 000 €',
 };
 
