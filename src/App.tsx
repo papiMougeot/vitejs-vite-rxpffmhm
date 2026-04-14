@@ -1,4 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { calculerBouloscopeData } from './modules/adn-engine';
+import { H } from './tiragesFDJ';
+import { ADN } from './modules/adn-data';
+import { getBpgPartenaires } from './modules/bpg-data';import React, { useState, useEffect, useRef } from 'react';
 // IMPORT DE LA BIBLIOTHÈQUE DE DONNÉES
 import { LE_CODEX } from './boulotron-data';
 import { LeSaviezVousModal } from './LeSaviezVousModal';
@@ -1452,7 +1455,11 @@ export default function App() {
 
   // STATE LUNAIRE (LE CERVEAU)
   const [lune, setLune] = useState<PhaseLune | null>(null);
-
+  const bouloscopeData = calculerBouloscopeData(
+    H,
+    INFOS.boules.map(Number)
+  );
+  
   // EFFECT LUNAIRE (CALCUL AU DÉMARRAGE)
   useEffect(() => {
     const phaseActuelle = obtenirPhaseLunaire();
