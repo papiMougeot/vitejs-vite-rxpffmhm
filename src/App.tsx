@@ -1,4 +1,5 @@
-import { calculerBouloscopeData } from './modules/adn-engine';
+
+import { BouloscopeModal } from './BouloscopeModal';import { calculerBouloscopeData } from './modules/adn-engine';
 import { H } from './tiragesFDJ';
 import { ADN } from './modules/adn-data';
 import { getBpgPartenaires } from './modules/bpg-data';import React, { useState, useEffect, useRef } from 'react';
@@ -1452,6 +1453,7 @@ export default function App() {
 
   // STATE MODALE CODEX
   const [showCodex, setShowCodex] = useState(false);
+  const [showBouloscope, setShowBouloscope] = useState(false);
 
   // STATE LUNAIRE (LE CERVEAU)
   const [lune, setLune] = useState<PhaseLune | null>(null);
@@ -1882,6 +1884,14 @@ export default function App() {
       {showCodex && (
         <CodexReader onClose={handleCloseCodex} onApply={handleApplyStrategy} />
       )}
+      {showBouloscope && resultData && (
+  <BouloscopeModal
+    data={bouloscopeData}
+    balls={resultData.balls}
+    stars={resultData.stars}
+    onClose={() => setShowBouloscope(false)}
+  />
+)}
 
       {/* SIDEBAR GAUCHE */}
       <div
@@ -2285,7 +2295,14 @@ export default function App() {
                       <Ball num={num} isStar={true} />
                     </div>
                   ))}
-                </div>
+                {resultData && (
+  <button
+    onClick={(e) => { e.stopPropagation(); setShowBouloscope(true); }}
+    style={{ background: 'transparent', border: 'none', cursor: 'pointer',
+             fontSize: '24px', marginLeft: '8px' }}
+    title="Ouvrir le Bouloscope"
+  >🔬</button>
+)}</div>
               )}
             </div>
             <div className="absolute top-32 -right-8 w-8 h-32 bg-gradient-to-r from-gray-300 to-gray-500 rounded-r-full border-2 border-gray-600 z-[-1]">
