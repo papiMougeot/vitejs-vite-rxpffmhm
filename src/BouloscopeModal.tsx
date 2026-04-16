@@ -7,7 +7,6 @@
 
 import React, { useState, useMemo } from 'react';
 import { BouloscopeData } from './modules/adn-engine';
-import { getBpgPartenaires } from './modules/bpg-data';
 
 // ----------------------------------------------------------------
 // TYPES
