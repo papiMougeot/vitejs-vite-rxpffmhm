@@ -1,8 +1,7 @@
 
 import { BouloscopeModal } from './BouloscopeModal';import { calculerBouloscopeData } from './modules/adn-engine';
 import { H } from './tiragesFDJ';
-import { ADN } from './modules/adn-data';
-import { getBpgPartenaires } from './modules/bpg-data';import React, { useState, useEffect, useRef } from 'react';
+
 // IMPORT DE LA BIBLIOTHÈQUE DE DONNÉES
 import { LE_CODEX } from './boulotron-data';
 import { LeSaviezVousModal } from './LeSaviezVousModal';

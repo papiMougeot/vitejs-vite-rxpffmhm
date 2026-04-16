@@ -281,7 +281,7 @@ function OngletGenes({ data, balls }: { data: BouloscopeData; balls: number[] })
 // ----------------------------------------------------------------
 // ONGLET : MARATHON
 // ----------------------------------------------------------------
-function OngletMarathon({ balls, stars }: { balls: number[]; stars: number[] }) {
+function OngletMarathon({ balls: _balls, stars: _stars }: { balls: number[]; stars: number[] }) {
   // Détection Phénix
   const PHENIX = [4, 30, 31, 38, 42];
   const sorted = [...balls].sort((a, b) => a - b);

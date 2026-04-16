@@ -6,7 +6,7 @@
 
 export type ModeLicence = 'gratuit' | 'premium';
 
-export const LICENCE: ModeLicence = 'gratuit';
+export let LICENCE: ModeLicence = 'gratuit';
 
 // ----------------------------------------------------------------
 // Ce qui est accessible par mode
