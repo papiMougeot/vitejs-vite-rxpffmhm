@@ -13,18 +13,15 @@ export let LICENCE: ModeLicence = 'gratuit';
 // ----------------------------------------------------------------
 
 export const ACCES = {
-  // Onglets du Bouloscope
-  ongletScoreADN:  true,              // toujours visible
-  ongletGenes:     LICENCE === 'premium',
-  ongletMarathon:  true,              // toujours visible
-  ongletTamis:     LICENCE === 'premium',
-  ongletBPG:       LICENCE === 'premium',
-
-  // Signaux détaillés
-  tripleA:         LICENCE === 'premium',
-  tripleB:         LICENCE === 'premium',
-  jamais:          true,              // toujours visible
-  annonces:        LICENCE === 'premium',
+  ongletScoreADN: true,
+  ongletGenes:    false,
+  ongletMarathon: true,
+  ongletTamis:    false,
+  ongletBPG:      false,
+  tripleA:        false,
+  tripleB:        false,
+  jamais:         true,
+  annonces:       false,
 };
 
 // ----------------------------------------------------------------
