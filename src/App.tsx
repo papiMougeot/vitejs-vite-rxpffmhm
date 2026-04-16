@@ -1,5 +1,6 @@
-
-import { BouloscopeModal } from './BouloscopeModal';import { calculerBouloscopeData } from './modules/adn-engine';
+import React, { useState, useEffect, useRef } from 'react';
+import { BouloscopeModal } from './BouloscopeModal';
+import { calculerBouloscopeData } from './modules/adn-engine';
 import { H } from './tiragesFDJ';
 
 // IMPORT DE LA BIBLIOTHÈQUE DE DONNÉES

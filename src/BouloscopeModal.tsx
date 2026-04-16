@@ -4,7 +4,7 @@
 // PapiMougeotIA · Avril 2026
 // ================================================================
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BouloscopeData } from './modules/adn-engine';
 import { ACCES, MSG_PREMIUM } from './licence';
 
