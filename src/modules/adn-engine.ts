@@ -93,7 +93,6 @@ export interface BouloscopeData {
 // ----------------------------------------------------------------
 
 const NB_NUMEROS = 50;
-const NB_ETOILES = 12;
 
 // Seuils groupements d'écarts (découverte Papi Mougeot 1971)
 const SEUIL_G1 = 3;   // G1 : écarts 0 à 3

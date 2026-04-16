@@ -281,7 +281,7 @@ function OngletGenes({ data, balls }: { data: BouloscopeData; balls: number[] })
 // ----------------------------------------------------------------
 // ONGLET : MARATHON
 // ----------------------------------------------------------------
-function OngletMarathon({ balls, stars }: { balls: number[]; stars: number[] }) {
+function OngletMarathon({ balls: _b, stars: _s }: { balls: number[]; stars: number[] }) {
   // Détection Phénix
   const PHENIX = [4, 30, 31, 38, 42];
   const sorted = [...balls].sort((a, b) => a - b);
@@ -386,7 +386,7 @@ function OngletTamis({ data, balls }: { data: BouloscopeData; balls: number[] })
 // ----------------------------------------------------------------
 // ONGLET : BPG
 // ----------------------------------------------------------------
-function OngletBPG({ balls }: { balls: number[] }) {
+function OngletBPG({ balls: _b }: { balls: number[] }) {
   if (!ACCES.ongletBPG) return <PremiumLock />;
 
   return (
