@@ -284,7 +284,7 @@ function OngletGenes({ data, balls }: { data: BouloscopeData; balls: number[] })
 function OngletMarathon(_props: { balls: number[]; stars: number[] }) {
     // Détection Phénix
   const PHENIX = [4, 30, 31, 38, 42];
-  const sorted = [...balls].sort((a, b) => a - b);
+  const sorted = [..._props.balls].sort((a, b) => a - b);
   const estPhenix = PHENIX.every((n, i) => n === sorted[i]);
 
   return (
