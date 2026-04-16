@@ -2302,7 +2302,8 @@ export default function App() {
              fontSize: '24px', marginLeft: '8px' }}
     title="Ouvrir le Bouloscope"
   >🔬</button>
-)}</div>
+  )}
+  </div>
               )}
             </div>
             <div className="absolute top-32 -right-8 w-8 h-32 bg-gradient-to-r from-gray-300 to-gray-500 rounded-r-full border-2 border-gray-600 z-[-1]">
