@@ -1884,15 +1884,17 @@ export default function App() {
       {showCodex && (
         <CodexReader onClose={handleCloseCodex} onApply={handleApplyStrategy} />
       )}
-      {showBouloscope && resultData && (
+ {showBouloscope && resultData && (
   <BouloscopeModal
     data={bouloscopeData}
     balls={resultData.balls}
     stars={resultData.stars}
+    tirages={H}
+    source={gameMode === 'boulotron' ? 'Boulotron' :
+            gameMode === 'goulotron' ? 'Goulotron' : 'Sélectron'}
     onClose={() => setShowBouloscope(false)}
   />
 )}
-
       {/* SIDEBAR GAUCHE */}
       <div
         id="history-printable"
