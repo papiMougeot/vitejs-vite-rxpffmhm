@@ -2299,7 +2299,8 @@ export default function App() {
   <button
     onClick={(e) => { e.stopPropagation(); setShowBouloscope(true); }}
     style={{ background: 'transparent', border: 'none', cursor: 'pointer',
-             fontSize: '24px', marginLeft: '8px' }}
+    fontSize: '24px', position: 'absolute', right: '-45px',
+    top: '50%', transform: 'translateY(-50%)' }}
     title="Ouvrir le Bouloscope"
   >🔬</button>
   )}
