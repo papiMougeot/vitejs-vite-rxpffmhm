@@ -281,8 +281,8 @@ function OngletGenes({ data, balls }: { data: BouloscopeData; balls: number[] })
 // ----------------------------------------------------------------
 // ONGLET : MARATHON
 // ----------------------------------------------------------------
-function OngletMarathon({ balls: _b, stars: _s }: { balls: number[]; stars: number[] }) {
-  // Détection Phénix
+function OngletMarathon(_props: { balls: number[]; stars: number[] }) {
+    // Détection Phénix
   const PHENIX = [4, 30, 31, 38, 42];
   const sorted = [...balls].sort((a, b) => a - b);
   const estPhenix = PHENIX.every((n, i) => n === sorted[i]);
@@ -386,8 +386,8 @@ function OngletTamis({ data, balls }: { data: BouloscopeData; balls: number[] })
 // ----------------------------------------------------------------
 // ONGLET : BPG
 // ----------------------------------------------------------------
-function OngletBPG({ balls: _b }: { balls: number[] }) {
-  if (!ACCES.ongletBPG) return <PremiumLock />;
+function OngletBPG(_props: { balls: number[] }) {
+    if (!ACCES.ongletBPG) return <PremiumLock />;
 
   return (
     <div style={{ textAlign: 'center', color: '#64748b', fontSize: '13px', padding: '1rem' }}>
