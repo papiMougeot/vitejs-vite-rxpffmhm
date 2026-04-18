@@ -372,11 +372,8 @@ function OngletTamis({ data, balls }: { data: BouloscopeData; balls: number[] })
 // ----------------------------------------------------------------
 // ONGLET BPG
 // ----------------------------------------------------------------
-function OngletBPG({ balls }: { balls: number[] }) {
-  const bpgInfo = useMemo(() => {
-    try { return getBpgPartenaires(balls); }
-    catch { return null; }
-  }, []);
+function OngletBPG({ balls: _balls }: { balls: number[] }) {
+  const bpgInfo = useMemo(() => null, []);
 
   return (
     <div>
