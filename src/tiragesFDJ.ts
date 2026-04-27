@@ -1,18 +1,19 @@
 // ============================================================
 // TIRAGES EUROMILLIONS - Base compacte pour StackBlitz
 // ============================================================
-// Dernier tirage : N°1939 du 21/04/2026
-// Total : 1939 tirages
+// Dernier tirage : N°1940 du 24/04/2026
+// Total : 1940 tirages
 // Format : [n1, n2, n3, n4, n5, e1, e2] (ordre croissant)
 // Ordre : du plus recent (index 0) au plus ancien
 // Source : colonnes L et M du fichier FDJ (boules triees)
 // ============================================================
 
 // Numero du tirage le plus recent (index 0 du tableau)
-export const DERNIER_NUMERO = 1939;
+export const DERNIER_NUMERO = 1940;
 
 // Chaque ligne : [boule1, boule2, boule3, boule4, boule5, etoile1, etoile2]
 export const H: number[][] = [
+  [25,26,30,40,45,1,5],
   [13,16,29,40,47,3,4],
   [22,23,28,41,47,6,8],
   [1,2,4,28,44,5,12],
