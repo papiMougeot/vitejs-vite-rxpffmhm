@@ -4,15 +4,15 @@
 
 export const INFOS_TIRAGE = {
   titre_entete: 'Dernier tirage €Millions enregistré :',
-  numero_et_date: 'N° 1940 – vendredi 24/04/2026',
-  boules: ['25', '26', '30', '40', '45'],
-  etoiles: ['01', '05'],
-  rang: 'Rang : 135 551 662',
-  gagnants: '3 gagnants à 5+1',
-  gain_montant: 'Gain de 204 255 €',
-  gain_lieu: 'remporté en Europe dont 2 en France.',
-  my_million: 'My Million N° 1 604 533',
-  prochain_date: 'Prochain Tirage : mardi 28/04/2026',
-  prochain_jackpot: 'Jackpot de 26 000 000 €',
+  numero_et_date: 'N° 1941 – mardi 28/04/2026',
+  boules: ['26', '29', '41', '46', '47'],
+  etoiles: ['08', '09'],
+  rang: 'Rang : 136 631 739',
+  gagnants: '1 gagnant à 5+1',
+  gain_montant: 'Gain de 480 828 €',
+  gain_lieu: 'remporté en Europe dont aucun en France',
+  my_million: 'My Million N° 3 518 789',
+  prochain_date: 'Prochain Tirage : vendredi 01/05/2026',
+  prochain_jackpot: 'Jackpot de 40 000 000 €',
 };
 
