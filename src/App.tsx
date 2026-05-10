@@ -1839,8 +1839,7 @@ export default function App() {
     }
   }, [showInput]);
   const isLampGreen = phase === 'step3_left';
-    phase
-  );
+  
   // const isAnySpinning = ['step1_right', 'step2_middle', 'step3_left'].includes(
   //   phase
   // );
