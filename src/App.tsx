@@ -1617,6 +1617,13 @@ export default function App() {
     if (phase === 'step3_left') {
       clearInterval(leftInterval.current);
       const total = leftVal * 1000000 + midVal * 1000 + rightVal;
+
+      if (total < 1 || total > MAX_COMBINATIONS) {
+        rightInterval.current = startSpinning(setRightVal, 999);
+        setPhase('step1_right');
+        return;
+      }
+
       setFinalRank(total);
 
       // AJOUT : Délai de 0.5s pour le suspense Boulotron
