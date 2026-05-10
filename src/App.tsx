@@ -1914,14 +1914,14 @@ export default function App() {
               <h2 className="text-lg font-bold text-yellow-400 print-black-text uppercase tracking-tighter">
                 Historique
               </h2>
-              <div className="flex items-center bg-slate-900/50 px-2 py-0.5 rounded border border-slate-700 ml-1 min-w-[4.5rem] justify-center">
+              <div className="flex items-center bg-slate-900/50 px-2 py-0.5 rounded border border-slate-700 ml-1 w-[3rem] justify-center">
   <span className="text-sm font-bold text-white font-mono">{history.length}</span>
   <span className="text-sm font-bold text-white font-mono">/{historyLimit}</span>
 </div>
             </div>
 
             {/* 2. BLOC D'ACTIONS HARMONISÉ (ROUE + IMPRIMANTE + CSV) */}
-            <div className="flex items-center gap-4 no-print">
+            <div className="flex items-center gap-2 no-print">
               <button 
                 onClick={() => {
                   const input = window.prompt("Capacité de l'historique (ex: 30, 50, 100) :", historyLimit.toString());
