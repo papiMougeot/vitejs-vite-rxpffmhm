@@ -1914,9 +1914,10 @@ export default function App() {
               <h2 className="text-lg font-bold text-yellow-400 print-black-text uppercase tracking-tighter">
                 Historique
               </h2>
-              <div className="flex items-center bg-slate-900/50 px-2 py-0.5 rounded border border-slate-700 ml-1">
-                <span className="text-sm font-bold text-white font-mono">{history.length}</span>
-                <span className="text-sm font-bold text-white font-mono">/{historyLimit}</span>
+              <div className="flex items-center bg-slate-900/50 px-2 py-0.5 rounded border border-slate-700 ml-1 min-w-[4.5rem] justify-center">
+  <span className="text-sm font-bold text-white font-mono">{history.length}</span>
+  <span className="text-sm font-bold text-white font-mono">/{historyLimit}</span>
+</div>
               </div>
             </div>
 
@@ -1942,9 +1943,9 @@ export default function App() {
                 <PrinterIcon size={18} />
               </button>
               
-              <button onClick={handleDownloadCSV} className="flex items-center gap-1 text-green-600 hover:text-green-400 transition-colors text-[10px] font-bold bg-transparent">
-                <DownloadIcon size={18} /> (.csv)
-              </button>
+              <button onClick={handleDownloadCSV} className="flex items-center text-green-600 hover:text-green-400 transition-colors bg-transparent">
+  <DownloadIcon size={18} />
+</button>
             </div>
           </div>
         </div>
