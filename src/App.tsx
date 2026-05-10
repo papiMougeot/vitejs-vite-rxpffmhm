@@ -1838,7 +1838,7 @@ export default function App() {
       inputRef.current.focus();
     }
   }, [showInput]);
-  const isLampGreen = ['step1_right', 'step2_middle', 'step3_left'].includes(
+  const isLampGreen = phase === 'step3_left';
     phase
   );
   // const isAnySpinning = ['step1_right', 'step2_middle', 'step3_left'].includes(
