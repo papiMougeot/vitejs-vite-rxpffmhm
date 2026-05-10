@@ -1918,7 +1918,6 @@ export default function App() {
   <span className="text-sm font-bold text-white font-mono">{history.length}</span>
   <span className="text-sm font-bold text-white font-mono">/{historyLimit}</span>
 </div>
-              </div>
             </div>
 
             {/* 2. BLOC D'ACTIONS HARMONISÉ (ROUE + IMPRIMANTE + CSV) */}
