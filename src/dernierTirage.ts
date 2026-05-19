@@ -4,15 +4,15 @@
 
 export const INFOS_TIRAGE = {
   titre_entete: 'Dernier tirage €Millions enregistré :',
-  numero_et_date: 'N° 1945 – mardi 12/05/2026',
-  boules: ['04', '26', '32', '35', '36'],
-  etoiles: ['05', '07'],
-  rang: 'Rang : 48 605 344',
-  gagnants: '3 gagnants à 5',
-  gain_montant: 'Gain de 229 376 €',
-  gain_lieu: ' remporté en Europe mais aucun en France',
-  my_million: 'My Million N° 3 984 678',
-  prochain_date: 'Prochain Tirage : vendredi 15/05/2026',
-  prochain_jackpot: 'Jackpot de 83 000 000 €',
+  numero_et_date: 'N° 1946 – vendredi 15/05/2026',
+  boules: ['03', '10', '38', '41', '43'],
+  etoiles: ['02', '09'],
+  rang: 'Rang : 32 549 040',
+  gagnants: '1 gagnant à 5+1',
+  gain_montant: 'Gain de 710 654 €',
+  gain_lieu: 'remporté en Europe dont aucun en France',
+  my_million: 'My Million N° 5 658 161',
+  prochain_date: 'Prochain Tirage : mardi 19/05/2026',
+  prochain_jackpot: 'Jackpot de 92 000 000 €',
 };
 
