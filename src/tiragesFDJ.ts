@@ -1,18 +1,19 @@
 // ============================================================
 // TIRAGES EUROMILLIONS - Base compacte pour StackBlitz
 // ============================================================
-// Dernier tirage : N°1949 du 26/05/2026
-// Total : 1949 tirages
+// Dernier tirage : N°1950 du 29/05/2026
+// Total : 1950 tirages
 // Format : [n1, n2, n3, n4, n5, e1, e2] (ordre croissant)
 // Ordre : du plus recent (index 0) au plus ancien
 // Source : colonnes L et M du fichier FDJ (boules triees)
 // ============================================================
 
 // Numero du tirage le plus recent (index 0 du tableau)
-export const DERNIER_NUMERO = 1949;
+export const DERNIER_NUMERO = 1950;
 
 // Chaque ligne : [boule1, boule2, boule3, boule4, boule5, etoile1, etoile2]
 export const H: number[][] = [
+  [5,14,18,31,35,2,12],
   [6,23,25,35,37,6,12],
   [6,22,26,31,37,5,8],
   [2,12,20,38,45,2,5],
