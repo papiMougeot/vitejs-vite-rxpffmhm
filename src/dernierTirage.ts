@@ -4,15 +4,15 @@
 
 export const INFOS_TIRAGE = {
   titre_entete: 'Dernier tirage €Millions enregistré :',
-  numero_et_date: 'N° 1953 – mardi 09/06/2026',
-  boules: ['02', '07', '23', '44', '46'],
-  etoiles: ['03', '05'],
-  rang: 'Rang : 18 486 689',
-  gagnants: '1 gagnant à 5+2',
-  gain_montant: 'Gain de 174 984 088 €',
-  gain_lieu: 'remporté en BELGIQUE',
-  my_million: 'My Million N° 5 820 737',
-  prochain_date: 'Prochain Tirage : vendredi 12/06/2026',
-  prochain_jackpot: 'Jackpot de 17 000 000 €',
+  numero_et_date: 'N° 1954 – vendredi 12/06/2026',
+  boules: ['04', '07', '14', '22', '23'],
+  etoiles: ['01', '07'],
+  rang: 'Rang : 40 725 306',
+  gagnants: '3 gagnants à 5+1',
+  gain_montant: 'Gain de 212 362 €',
+  gain_lieu: 'remporté en Europe dont aucun en France',
+  my_million: 'My Million N° 1 952 951',
+  prochain_date: 'Prochain Tirage : mardi 16/06/2026',
+  prochain_jackpot: 'Jackpot de 26 000 000 €',
 };
 
