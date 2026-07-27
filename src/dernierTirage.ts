@@ -4,15 +4,15 @@
 
 export const INFOS_TIRAGE = {
   titre_entete: 'Dernier tirage €Millions enregistré :',
-  numero_et_date: 'N° 1965 – mardi 21/07/2026',
-  boules: ['02', '03', '08', '28', '39'],
-  etoiles: ['02', '11'],
-  rang: 'Rang : 14 280 308',
-  gagnants: '2 gagnants à 5+1',
-  gain_montant: 'Gain de 250 104 €',
-  gain_lieu: 'remporté en Europe dont aucun en France',
-  my_million: 'My Million N° 6 580 122',
-  prochain_date: 'Prochain Tirage : vendredi 24/07/2026',
-  prochain_jackpot: 'Jackpot de 70 000 000 €',
+  numero_et_date: 'N° 1966 – vendredi 24/07/2026',
+  boules: ['08', '10', '30', '36', '47'],
+  etoiles: ['01', '04'],
+  rang: 'Rang : 77 580 825',
+  gagnants: '1 gagnant à 5+1',
+  gain_montant: 'Gain de 645 724 €',
+  gain_lieu: 'remporté en France',
+  my_million: 'My Million N° 8 263 887',
+  prochain_date: 'Prochain Tirage : mardi 28/07/2026',
+  prochain_jackpot: 'Jackpot de 78 000 000 €',
 };
 
