@@ -4,15 +4,15 @@
 
 export const INFOS_TIRAGE = {
   titre_entete: 'Dernier tirage €Millions enregistré :',
-  numero_et_date: 'N° 1970 – vendredi 07/08/2026',
-  boules: ['26', '29', '35', '38', '47'],
+  numero_et_date: 'N° 1971 – mardi 11/08/2026',
+  boules: ['03', '11', '17', '46', '48'],
   etoiles: ['01', '02'],
-  rang: 'Rang : 136 603 237',
-  gagnants: '1 gagnant à 5+2',
-  gain_montant: 'Gain de 111 058 174 €',
-  gain_lieu: 'remporté en Belgique',
-  my_million: 'My Million N° 2 969 256',
-  prochain_date: 'Prochain Tirage : mardi 11/08/2026',
-  prochain_jackpot: 'Jackpot de 17 000 000 €',
+  rang: 'Rang : 32 808 931',
+  gagnants: '4 gagnants à 5+1',
+  gain_montant: 'Gain de 112 649 €',
+  gain_lieu: 'remporté en Europe dont 1 en France',
+  my_million: 'My Million N° 8 665 058',
+  prochain_date: 'Prochain Tirage : vendredi 14/08/2026',
+  prochain_jackpot: 'Jackpot de 28 000 000 €',
 };
 
