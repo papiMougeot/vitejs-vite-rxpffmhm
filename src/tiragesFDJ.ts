@@ -1,18 +1,19 @@
 // ============================================================
 // TIRAGES EUROMILLIONS - Base compacte pour StackBlitz
 // ============================================================
-// Dernier tirage : N°1976 du 28/08/2026
-// Total : 1976 tirages
+// Dernier tirage : N°1977 du 01/09/2026
+// Total : 1977 tirages
 // Format : [n1, n2, n3, n4, n5, e1, e2] (ordre croissant)
 // Ordre : du plus recent (index 0) au plus ancien
 // Source : colonnes L et M du fichier FDJ (boules triees)
 // ============================================================
 
 // Numero du tirage le plus recent (index 0 du tableau)
-export const DERNIER_NUMERO = 1976;
+export const DERNIER_NUMERO = 1977;
 
 // Chaque ligne : [boule1, boule2, boule3, boule4, boule5, etoile1, etoile2]
 export const H: number[][] = [
+  [2,10,23,37,47,3,5],
   [7,14,28,42,45,6,9],
   [8,16,30,47,48,4,9],
   [10,14,15,19,45,4,12],

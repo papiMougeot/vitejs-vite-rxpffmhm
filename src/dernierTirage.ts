@@ -4,15 +4,15 @@
 
 export const INFOS_TIRAGE = {
   titre_entete: 'Dernier tirage €Millions enregistré :',
-  numero_et_date: 'N° 1976 – vendredi 28/08/2026',
-  boules: ['07', '14', '28', '42', '45'],
-  etoiles: ['06', '09'],
-  rang: 'Rang : 72 315 126',
+  numero_et_date: 'N° 1977 – mardi 01/09/2026',
+  boules: ['02', '10', '23', '37', '47'],
+  etoiles: ['03', '05'],
+  rang: 'Rang : 20 595 917',
   gagnants: '6 gagnants à 5+1',
-  gain_montant: 'Gain de 109 519 €',
-  gain_lieu: 'remporté en Europe dont 1 en France',
-  my_million: 'My Million N° 2 965 205',
-  prochain_date: 'Prochain Tirage : mardi 01/09/2026',
-  prochain_jackpot: 'Jackpot de 78 000 000 €',
+  gain_montant: 'Gain de 88 442 €',
+  gain_lieu: 'remporté en Europe dont 2 en France',
+  my_million: 'My Million N° 235 005',
+  prochain_date: 'Prochain Tirage : vendredi 04/09/2026',
+  prochain_jackpot: '89 000 000 €',
 };
 
