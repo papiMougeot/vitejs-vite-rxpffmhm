@@ -4,15 +4,15 @@
 
 export const INFOS_TIRAGE = {
   titre_entete: 'Dernier tirage €Millions enregistré :',
-  numero_et_date: 'N° 1991 – mardi 20/10/2026',
-  boules: ['09', '15', '16', '37', '43'],
-  etoiles: ['07', '10'],
-  rang: 'Rang : 86 521 566',
-  gagnants: '1 gagnant à 5+1',
-  gain_montant: 'Gain de 485 757 €',
-  gain_lieu: 'remporté en Europe dont aucun en France',
-  my_million: 'My Million N° 7 426 301',
-  prochain_date: 'Prochain Tirage : vendredi 23/10/2026',
-  prochain_jackpot: 'Jackpot de 71 000 000 €',
+  numero_et_date: 'N° 1992 – vendredi 23/10/2026',
+  boules: ['24', '33', '35', '44', '47'],
+  etoiles: ['07', '11'],
+  rang: 'Rang : 135 308 371',
+  gagnants: '4 gagnants à 5+1',
+  gain_montant: 'Gain de 173 227 €',
+  gain_lieu: 'remporté en Europe dont 3 en France',
+  my_million: 'My Million N° 490 409',
+  prochain_date: 'Prochain Tirage : mardi 27/10/2026',
+  prochain_jackpot: 'Jackpot de 79 000 000 €',
 };
 
