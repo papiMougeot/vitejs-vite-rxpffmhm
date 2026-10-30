@@ -1,18 +1,19 @@
 // ============================================================
 // TIRAGES EUROMILLIONS - Base compacte pour StackBlitz
 // ============================================================
-// Dernier tirage : N°1992 du 23/10/2026
-// Total : 1992 tirages
+// Dernier tirage : N°1993 du 27/10/2026
+// Total : 1993 tirages
 // Format : [n1, n2, n3, n4, n5, e1, e2] (ordre croissant)
 // Ordre : du plus recent (index 0) au plus ancien
 // Source : colonnes L et M du fichier FDJ (boules triees)
 // ============================================================
 
 // Numero du tirage le plus recent (index 0 du tableau)
-export const DERNIER_NUMERO = 1992;
+export const DERNIER_NUMERO = 1993;
 
 // Chaque ligne : [boule1, boule2, boule3, boule4, boule5, etoile1, etoile2]
 export const H: number[][] = [
+  [21,30,32,42,48,3,6],
   [24,33,35,44,47,7,11],
   [9,15,16,37,43,7,10],
   [7,15,16,22,35,4,6],
