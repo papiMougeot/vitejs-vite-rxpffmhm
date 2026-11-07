@@ -1399,16 +1399,6 @@ export default function App() {
     }
   }, []);
   useEffect(() => {
-    const scriptId = 'tailwind-cdn-script';
-    if (!document.getElementById(scriptId)) {
-      const script = document.createElement('script');
-      script.id = scriptId;
-      script.src = 'https://cdn.tailwindcss.com';
-      script.async = true;
-      document.head.appendChild(script);
-    }
-  }, []);
-  useEffect(() => {
     const fontId = 'google-fonts-boulotron';
     if (!document.getElementById(fontId)) {
       const link = document.createElement('link');
