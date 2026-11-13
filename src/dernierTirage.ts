@@ -4,15 +4,15 @@
 
 export const INFOS_TIRAGE = {
   titre_entete: 'Dernier tirage €Millions enregistré :',
-  numero_et_date: 'N° 1996 – vendredi 06/11/2026',
-  boules: ['07', '13', '37', '47', '49'],
-  etoiles: ['07', '11'],
-  rang: 'Rang : 71 928 571',
-  gagnants: '6 gagnants à 5+1',
-  gain_montant: 'Gain de 179 252 €',
-  gain_lieu: 'remporté en Europe dont 1 en France',
-  my_million: 'My Million N° 7 647 011',
-  prochain_date: 'Prochain Tirage : mardi 10/11/2026',
-  prochain_jackpot: 'Jackpot de 141 000 000 €',
+  numero_et_date: 'N° 1997 – mardi 10/11/2026',
+  boules: ['15', '18', '31', '37', '41'],
+  etoiles: ['01', '05'],
+  rang: 'Rang : 115 969 330',
+  gagnants: '1 gagnant à 5+2',
+  gain_montant: 'Gain de 141 899 445 €',
+  gain_lieu: 'remporté en ESPAGNE',
+  my_million: 'My Million N° 1 547 343',
+  prochain_date: 'Prochain Tirage : vendredi 13/11/2026',
+  prochain_jackpot: 'Jackpot de 17 000 000 €',
 };
 
