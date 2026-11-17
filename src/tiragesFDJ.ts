@@ -1,18 +1,19 @@
 // ============================================================
 // TIRAGES EUROMILLIONS - Base compacte pour StackBlitz
 // ============================================================
-// Dernier tirage : N°1997 du 10/11/2026
-// Total : 1997 tirages
+// Dernier tirage : N°1998 du 13/11/2026
+// Total : 1998 tirages
 // Format : [n1, n2, n3, n4, n5, e1, e2] (ordre croissant)
 // Ordre : du plus recent (index 0) au plus ancien
 // Source : colonnes L et M du fichier FDJ (boules triees)
 // ============================================================
 
 // Numero du tirage le plus recent (index 0 du tableau)
-export const DERNIER_NUMERO = 1997;
+export const DERNIER_NUMERO = 1998;
 
 // Chaque ligne : [boule1, boule2, boule3, boule4, boule5, etoile1, etoile2]
 export const H: number[][] = [
+  [16,27,32,41,45,2,12],
   [15,18,31,37,41,1,5],
   [7,13,37,47,49,7,11],
   [13,23,38,39,48,5,8],
