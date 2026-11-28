@@ -1,18 +1,19 @@
 // ============================================================
 // TIRAGES EUROMILLIONS - Base compacte pour StackBlitz
 // ============================================================
-// Dernier tirage : N°2001 du 24/11/2026
-// Total : 2001 tirages
+// Dernier tirage : N°2002 du 27/11/2026
+// Total : 2002 tirages
 // Format : [n1, n2, n3, n4, n5, e1, e2] (ordre croissant)
 // Ordre : du plus recent (index 0) au plus ancien
 // Source : colonnes L et M du fichier FDJ (boules triees)
 // ============================================================
 
 // Numero du tirage le plus recent (index 0 du tableau)
-export const DERNIER_NUMERO = 2001;
+export const DERNIER_NUMERO = 2002;
 
 // Chaque ligne : [boule1, boule2, boule3, boule4, boule5, etoile1, etoile2]
 export const H: number[][] = [
+  [12,17,26,34,38,5,9],
   [3,5,37,44,49,5,6],
   [8,21,24,36,49,1,8],
   [35,37,38,46,48,1,2],
